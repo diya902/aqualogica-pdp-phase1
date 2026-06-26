@@ -1,9 +1,5 @@
-# Heavy folders not used by the live PDPs (the 3 standalone PDPs are fully self-contained).
-# These stay in git but are excluded from the Vercel deploy.
-uploads/
+# Excluded from the Vercel deploy (still kept in git).
+# The 3 root PDPs need amin/ (46-58 refs each) -> amin/ MUST ship.
+# assets/ is referenced 0 times by the live PDPs, so it is excluded (saves ~144MB).
 assets/
-amin/
-screenshots/
-build/
 tweaks-panel.jsx
-Aqualogica PDPs.html
