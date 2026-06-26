@@ -1,0 +1,9 @@
+# Heavy folders not used by the live PDPs (the 3 standalone PDPs are fully self-contained).
+# These stay in git but are excluded from the Vercel deploy.
+uploads/
+assets/
+amin/
+screenshots/
+build/
+tweaks-panel.jsx
+Aqualogica PDPs.html
