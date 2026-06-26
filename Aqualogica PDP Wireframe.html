@@ -1559,34 +1559,56 @@ html{scrollbar-width:none;-ms-overflow-style:none;}html::-webkit-scrollbar,body:
       </style>
       <div class="skinwx">
         <div class="uvtop">
-          <span class="uvloc"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.4 7-11a7 7 0 1 0-14 0c0 4.6 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>Delhi</span>
+          <span class="uvloc"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.4 7-11a7 7 0 1 0-14 0c0 4.6 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span id="swCity">Delhi</span></span>
           <span class="uvtoday"><i></i>Today</span>
         </div>
         <div class="uvbody">
           <div class="uvdata">
             <div class="uvtemp">
               <svg class="uvsun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.6" fill="#FFB300"></circle><g stroke="#FFB300" stroke-width="2" stroke-linecap="round"><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2 2M17.1 17.1l2 2M19.1 4.9l-2 2M6.9 17.1l-2 2"></path></g></svg>
-              <span class="uvdeg">32&deg;C</span>
+              <span class="uvdeg" id="swTemp">32&deg;C</span>
             </div>
             <div class="uvsep"></div>
             <div class="uvindex">
               <span class="uvlbl">UV Index</span>
-              <span class="uvval">8.4</span>
+              <span class="uvval" id="swUv">8.4</span>
             </div>
           </div>
-          <p class="uvadvice"><b>Tan</b> &amp; burn risk + <b>dryness</b> are high today.</p>
+          <p class="uvadvice" id="swAdvice"><b>Tan</b> &amp; burn risk + <b>dryness</b> are high today.</p>
           <div class="uvgauge" id="uvGauge">
             <div class="uvbar"><span class="uvmask"></span><span class="uvknob"></span></div>
-            <div class="uvscale"><span>LOW</span><span>MODERATE</span><span>HIGH</span><span class="on">VERY HIGH</span></div>
+            <div class="uvscale" id="swScale"><span>LOW</span><span>MODERATE</span><span>HIGH</span><span class="on">VERY HIGH</span></div>
           </div>
         </div>
       </div>
       <script>
-      (function(){var g=document.getElementById('uvGauge');if(!g)return;
-        function go(){g.classList.add('go');}
+      (function(){
+        var g=document.getElementById('uvGauge');
+        var knob=g?g.querySelector('.uvknob'):null,mask=g?g.querySelector('.uvmask'):null;
+        var cityEl=document.getElementById('swCity'),tempEl=document.getElementById('swTemp'),
+            uvEl=document.getElementById('swUv'),adviceEl=document.getElementById('swAdvice'),
+            scale=document.getElementById('swScale');
         var sc=document.getElementById('screen');
-        if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){go();io.disconnect();}});},{root:sc||null,threshold:.35});io.observe(g);}
-        else{go();}
+        var uvPos=91,shown=false; // default matches the static "very high" position
+        function place(){if(!knob)return;knob.style.left=uvPos+'%';if(mask)mask.style.left=uvPos+'%';}
+        function reveal(){if(shown)return;shown=true;place();}
+        if(g){
+          if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){reveal();io.disconnect();}});},{root:sc||null,threshold:.35});io.observe(g);}
+          else{reveal();}
+        }
+        function uvToPos(u){return Math.round(8+Math.max(0,Math.min(u,11))/11*83);} // 8%..91% across LOW..VERY HIGH
+        function uvBand(u){return u>=8?3:u>=6?2:u>=3?1:0;}
+        function setScale(u){if(!scale)return;var spans=scale.querySelectorAll('span'),b=uvBand(u);spans.forEach(function(s,i){s.classList.toggle('on',i===b);});}
+        function advice(t,h,u){var parts=[];if(u>=6)parts.push('<b>Tan</b> &amp; burn risk');if(h<40)parts.push('<b>dryness</b>');if(h>=65)parts.push('<b>shine</b> &amp; sweat');if(t>=34&&parts.indexOf('<b>shine</b> &amp; sweat')<0)parts.push('<b>heat</b> stress');return parts.length?parts.slice(0,2).join(' + ')+' are high today.':'Comfortable skin weather today.';}
+        function paint(d){
+          if(d.city&&cityEl)cityEl.textContent=d.city;
+          if(d.t!=null&&tempEl)tempEl.innerHTML=Math.round(d.t)+'&deg;C';
+          if(d.u!=null){if(uvEl)uvEl.textContent=Math.round(d.u*10)/10;uvPos=uvToPos(d.u);setScale(d.u);if(shown)place();}
+          if(d.t!=null&&d.h!=null&&adviceEl)adviceEl.innerHTML=advice(d.t,d.h,d.u||0);
+        }
+        function fetchWx(lat,lon,cy){fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,relative_humidity_2m,uv_index').then(function(r){return r.json();}).then(function(j){var c=j.current||{};paint({city:cy,t:c.temperature_2m,h:c.relative_humidity_2m,u:c.uv_index});}).catch(function(){});}
+        function reverseCity(lat,lon){return fetch('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude='+lat+'&longitude='+lon+'&localityLanguage=en').then(function(r){return r.json();}).then(function(j){return j.city||j.locality||j.principalSubdivision||'';}).catch(function(){return '';});}
+        if(navigator.geolocation){navigator.geolocation.getCurrentPosition(function(p){var la=p.coords.latitude,lo=p.coords.longitude;reverseCity(la,lo).then(function(cy){fetchWx(la,lo,cy);});},function(){},{timeout:6000,maximumAge:600000});}
       })();
       </script>
     </div>
