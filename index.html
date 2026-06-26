@@ -6,43 +6,61 @@
 <title>Aqualogica PDPs</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
+  :root{--teal:#2A6FDB;--ink:#14202c;}
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  html,body{margin:0;padding:0;height:100%;}
+  html,body{margin:0;padding:0;min-height:100%;}
   body{
     font-family:'Sora',sans-serif;
     background:#d9d6cd;
     min-height:100vh;
-    overflow-x:auto;
-  }
-  .pair{
-    display:flex;
-    gap:40px;
-    align-items:flex-start;
-    justify-content:flex-start;
-    padding:28px 40px 40px;
-    min-width:min-content;
-  }
-  .col{
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:14px;
-    flex:none;
   }
-  .label{
+  .tabs{
+    position:sticky;
+    top:0;
+    z-index:5;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    justify-content:center;
+    padding:22px 16px 18px;
+    background:rgba(217,214,205,.92);
+    backdrop-filter:blur(8px);
+    width:100%;
+  }
+  .tab{
     font-family:'Sora',sans-serif;
     font-weight:700;
     font-size:15px;
-    color:#14202c;
+    color:var(--ink);
     background:#fff;
+    border:0;
     border-radius:999px;
-    padding:8px 24px;
+    padding:10px 26px;
+    cursor:pointer;
     box-shadow:0 6px 18px rgba(0,0,0,.08);
+    transition:transform .12s ease, background .12s ease, color .12s ease;
     white-space:nowrap;
+  }
+  .tab:hover{transform:translateY(-1px);}
+  .tab[aria-selected="true"]{
+    background:var(--teal);
+    color:#fff;
+    box-shadow:0 8px 22px rgba(42,111,219,.35);
+  }
+  .stage{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    padding:8px 16px 40px;
+    width:100%;
   }
   iframe{
     width:390px;
     height:860px;
+    max-width:100%;
     border:0;
     border-radius:18px;
     box-shadow:0 6px 18px rgba(0,0,0,.08);
@@ -52,19 +70,23 @@
 </style>
 </head>
 <body>
-  <div class="pair">
-    <div class="col">
-      <div class="label">Sunscreen</div>
-      <iframe src="Aqualogica%20PDP%20Wireframe.html" title="Sunscreen PDP"></iframe>
-    </div>
-    <div class="col">
-      <div class="label">Fragrance</div>
-      <iframe src="Aqualogica%20Mist%20PDP.html" title="Fragrance PDP"></iframe>
-    </div>
-    <div class="col">
-      <div class="label">Combo Gift Set</div>
-      <iframe src="Aqualogica%20Combo%20PDP.html" title="Combo Gift Set PDP"></iframe>
-    </div>
+  <div class="tabs" role="tablist" aria-label="Select a PDP">
+    <button class="tab" role="tab" aria-selected="true"  data-src="Aqualogica%20PDP%20Wireframe.html">Sunscreen</button>
+    <button class="tab" role="tab" aria-selected="false" data-src="Aqualogica%20Mist%20PDP.html">Fragrance</button>
+    <button class="tab" role="tab" aria-selected="false" data-src="Aqualogica%20Combo%20PDP.html">Combo Gift Set</button>
   </div>
+  <div class="stage">
+    <iframe id="frame" title="Selected PDP" src="Aqualogica%20PDP%20Wireframe.html"></iframe>
+  </div>
+  <script>
+    var tabs=document.querySelectorAll('.tab'),frame=document.getElementById('frame');
+    tabs.forEach(function(t){
+      t.addEventListener('click',function(){
+        tabs.forEach(function(x){x.setAttribute('aria-selected','false');});
+        t.setAttribute('aria-selected','true');
+        frame.src=t.dataset.src;
+      });
+    });
+  </script>
 </body>
 </html>
