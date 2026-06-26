@@ -3942,48 +3942,16 @@ ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<TweakApp/>);
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&ov.classList.contains('on'))closeZoom();});
 })();
 </script>
-<style id="clinrep-css">
-.clinrep{position:absolute;inset:0;z-index:260;display:none;}
-.clinrep.on{display:block;}
-.clinrep-scrim{position:absolute;inset:0;background:rgba(20,24,40,.5);}
-.clinrep-panel{position:absolute;left:0;right:0;bottom:0;height:92%;background:#fff;border-radius:20px 20px 0 0;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .35s cubic-bezier(.3,.8,.4,1);overflow:hidden;box-shadow:0 -8px 30px rgba(0,0,0,.18);}
-.clinrep.on .clinrep-panel{transform:translateY(0);}
-.clinrep-grab{width:40px;height:4px;border-radius:2px;background:rgba(0,0,0,.15);margin:8px auto 2px;}
-.clinrep-hd{flex:none;display:flex;align-items:center;gap:10px;padding:10px 14px 12px;box-shadow:0 3px 12px rgba(0,0,0,.06);}
-.clinrep-hd b{flex:1;font-family:'Sora';font-weight:700;font-size:14.5px;color:#14202c;}
-.clinrep-open{flex:none;font-family:'Sora';font-weight:700;font-size:13px;color:#2A6FDB;text-decoration:none;padding:7px 12px;border-radius:20px;background:rgba(42,111,219,.10);}
-.clinrep-close{width:34px;height:34px;border-radius:50%;border:0;background:#f0eee8;font-size:20px;line-height:1;cursor:pointer;flex:none;}
-.clinrep-body{flex:1;position:relative;min-height:0;background:#fff;}
-.clinrep-frame{width:100%;height:100%;border:0;background:#fff;display:block;}
-.clinrep-fallback{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:32px;font-family:'Sora';color:#14202c;}
-.clinrep.fallback .clinrep-fallback{display:flex;}
-.clinrep-fallback p{margin:0;font-size:14px;line-height:1.5;color:#5b5b5b;}
-.clinrep-fallback a{color:#fff;background:#2A6FDB;text-decoration:none;font-weight:700;font-size:14px;padding:11px 20px;border-radius:999px;box-shadow:0 6px 16px rgba(42,111,219,.28);}
-</style>
 <script>(function(){
   var REPORT_URL="https://aqualogica.in/pages/clinical-report-aqualogica-glow-dewy-gel-sunscreen-spf-50-pa-with-papaya-vitamin-c";
-  var sheet=document.createElement('div');sheet.className='clinrep';sheet.setAttribute('aria-hidden','true');
-  sheet.innerHTML='<div class="clinrep-scrim"></div><div class="clinrep-panel"><div class="clinrep-grab"></div><div class="clinrep-hd"><b>Clinical lab report</b><a class="clinrep-open" target="_blank" rel="noopener" href="#">Open &#8599;</a><button class="clinrep-close" type="button" aria-label="Close">&times;</button></div><div class="clinrep-body"><iframe class="clinrep-frame" title="Clinical lab report" referrerpolicy="no-referrer"></iframe><div class="clinrep-fallback"><p>This report opens on aqualogica.in and can\u2019t be shown inside the app.</p><a class="clinrep-fallback-link" target="_blank" rel="noopener" href="#">Open full report &#8599;</a></div></div></div>';
-  (document.querySelector('.phone')||document.body).appendChild(sheet);
-  var frame=sheet.querySelector('.clinrep-frame'),hdLink=sheet.querySelector('.clinrep-open'),fbLink=sheet.querySelector('.clinrep-fallback-link');
-  var loaded=false,fbTimer=null;
-  function openRep(url){
-    hdLink.href=url;fbLink.href=url;sheet.classList.remove('fallback');loaded=false;
-    if(frame.getAttribute('src')!==url)frame.setAttribute('src',url);
-    sheet.classList.add('on');sheet.setAttribute('aria-hidden','false');
-    clearTimeout(fbTimer);fbTimer=setTimeout(function(){if(!loaded)sheet.classList.add('fallback');},3500);
-  }
-  frame.addEventListener('load',function(){loaded=true;clearTimeout(fbTimer);});
-  function closeRep(){sheet.classList.remove('on');sheet.setAttribute('aria-hidden','true');clearTimeout(fbTimer);}
-  sheet.querySelector('.clinrep-scrim').addEventListener('click',closeRep);
-  sheet.querySelector('.clinrep-close').addEventListener('click',closeRep);
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&sheet.classList.contains('on'))closeRep();});
-  window.__openClinRep=openRep;
+  // Clinically-backed "View certificate" -> open the report in the SAME tab
+  // (the page sends X-Frame-Options: DENY, so it can't be iframed; top-level nav
+  //  works even when this PDP is itself inside the landing-page iframe).
   document.addEventListener('click',function(e){
-    var tgt=e.target.closest?e.target.closest('#clinCertBtn, .pc-doc'):null;
+    var tgt=e.target.closest?e.target.closest('.pc-doc'):null;
     if(!tgt)return;
     e.stopPropagation();e.preventDefault();
-    openRep(REPORT_URL);
+    try{window.top.location.href=REPORT_URL;}catch(_){window.location.href=REPORT_URL;}
   },true);
 })();</script>
 </body>
