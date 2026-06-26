@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aqualogica Tinted Sun Serum PDP</title>
 <meta name="ext-resource-dependency" content="amin/mist/product-hero.png" data-resource-id="res_product_hero" />
+<meta name="ext-resource-dependency" content="amin/rebel-spf-lifestyle.png" data-resource-id="res_rebel_spf_lifestyle" />
+<meta name="ext-resource-dependency" content="amin/routine-facewash-am.png" data-resource-id="res_routine_facewash_am" />
+<meta name="ext-resource-dependency" content="amin/routine-facewash-pm.png" data-resource-id="res_routine_facewash_pm" />
+<meta name="ext-resource-dependency" content="amin/routine-moisturizer.png" data-resource-id="res_routine_moisturizer" />
+<meta name="ext-resource-dependency" content="amin/routine-serum.png" data-resource-id="res_routine_serum" />
 <meta name="ext-resource-dependency" content="amin/trusted-10m-mist.png" data-resource-id="res_trusted_10m_mist" />
 <meta name="ext-resource-dependency" content="amin/mist/sunkissed-lifestyle.png" data-resource-id="res_sunkissed_lifestyle" />
 <meta name="ext-resource-dependency" content="amin/mist/cherry-bloom-lifestyle.png" data-resource-id="res_cherry_bloom_lifestyle" />
@@ -1499,9 +1504,9 @@ html{scrollbar-width:none;-ms-overflow-style:none;}html::-webkit-scrollbar,body:
     <!-- ROUTINE -->
     <div class="routine" id="routine" data-screen-label="Routine">
       <div class="rt-head">
-        <p class="rt-eyebrow">trending among influencers</p>
+        <p class="rt-eyebrow">In 12,736 creators&rsquo; routines<svg class="rt-spark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.6l1.9 7 7 1.9-7 1.9-1.9 7-1.9-7-7-1.9 7-1.9z"></path></svg></p>
         <div class="rt-chips" id="rtChips"></div>
-        <p class="rt-pairs">The 3-in-1 <span class="genz und" id="rtPairHandle">@rebel.kid</span> wears</p>
+        <div class="rt-pairs"><span>Layer this sunscreen the <span class="genz und" id="rtPairHandle">@rebel.kid</span> way.</span></div>
       </div>
       <div class="rt-nav rt-steps" id="rtSteps"></div>
       <div class="rt-deck" id="rtDeck"></div>
@@ -2183,32 +2188,36 @@ layout();
       deck=document.getElementById('rtDeck'),handleEl=document.getElementById('rtHandle'),
       pile=document.getElementById('rtPile'),stepsEl=document.getElementById('rtSteps');
   if(!sec||!chips||!deck)return;
-  var HERO_NM="Mid Night Bloom";
+  var HERO_NM="Glow+ Dewy Sunscreen SPF 50+";
   var cart=(window.__rtCart=window.__rtCart||{});
   function slug(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');}
   function num(s){return parseInt(String(s).split(';').pop().replace(/[^0-9]/g,''),10)||0;}
   var cur='rebel';
   var order=['rebel','tarini','aashi','isb'];
   var data={
-    rebel:{handle:"@rebel.kid",av:"amin/inf-rebel.png",top:"#ffe7b3",bottom:"#ffc0a8",grad:"linear-gradient(165deg,#ffe7b3 0%,#ffd49a 45%,#ffc0a8 100%)",accent:"#e0521b",ink:"#3a2410",total:"&#8377;1,197",mrp:"&#8377;1,497",save:"save &#8377;300",items:[
-      {cat:"Gourmand",nm:"Sun Kissed Vanilla",img:window.__resources["res_sunkissed_lifestyle"],price:"&#8377;399",mrp:"&#8377;499",r:"4.8",n:"12k",when:"day"},
-      {cat:"Fruity",nm:"Cherry Blossom Bloom",img:window.__resources["res_cherry_bloom_lifestyle"],price:"&#8377;399",mrp:"&#8377;499",r:"4.7",n:"7k",when:"both"},
-      {cat:"Amber",nm:"Mid Night Bloom",img:window.__resources["res_midnight_lifestyle"],price:"&#8377;399",mrp:"&#8377;499",r:"4.8",n:"9k",when:"night"}
+    rebel:{handle:"@rebel.kid",av:"amin/inf-rebel.png",top:"#ffe7b3",bottom:"#ffc0a8",grad:"linear-gradient(165deg,#ffe7b3 0%,#ffd49a 45%,#ffc0a8 100%)",accent:"#e0521b",ink:"#3a2410",total:"&#8377;2,152",mrp:"&#8377;2,446",save:"save &#8377;294",items:[
+      {cat:"Cleanse",nm:"Glow+ Smoothie Face Wash",img:window.__resources["res_routine_facewash_pm"],price:"&#8377;399",mrp:"&#8377;449",r:"4.7",n:"2.1k",when:"both"},
+      {cat:"Treat",nm:"Glow Boost Face Serum",img:window.__resources["res_routine_serum"],price:"&#8377;649",mrp:"&#8377;699",r:"4.8",n:"4.5k",when:"night"},
+      {cat:"Moisturise",nm:"Illuminate+ Hydrated Moisturizer",img:window.__resources["res_routine_facewash_am"],price:"&#8377;545",mrp:"&#8377;599",r:"4.6",n:"1.8k",when:"both"},
+      {cat:"Protect",nm:"Glow+ Dewy Sunscreen SPF 50+",img:window.__resources["res_rebel_spf_lifestyle"],price:"&#8377;559",mrp:"&#8377;699",r:"4.8",n:"26k",when:"day"}
     ]},
-    tarini:{handle:"@tarinipeshawaria",av:"amin/inf-tarini.png",top:"#ffe3ee",bottom:"#ffc2d8",grad:"linear-gradient(165deg,#ffe3ee 0%,#ffd0e0 45%,#ffc2d8 100%)",accent:"#d6336c",ink:"#4a1330",total:"&#8377;1,197",mrp:"&#8377;1,497",save:"save &#8377;300",items:[
-      {cat:"Fruity",nm:"Cherry Blossom Bloom",img:window.__resources["res_cherry_bloom_lifestyle"],price:"&#8377;399",mrp:"&#8377;499",r:"4.7",n:"7k",when:"day"},
-      {cat:"Floral",nm:"Dewy Floral Kiss",img:window.__resources["res_scent_card"],price:"&#8377;399",mrp:"&#8377;499",r:"4.6",n:"4k",when:"both"},
-      {cat:"Amber",nm:"Mid Night Bloom",img:window.__resources["res_midnight_lifestyle"],price:"&#8377;399",mrp:"&#8377;499",r:"4.8",n:"9k",when:"night"}
+    tarini:{handle:"@tarinipeshawaria",av:"amin/inf-tarini.png",top:"#ffe3ee",bottom:"#ffc2d8",grad:"linear-gradient(165deg,#ffe3ee 0%,#ffd0e0 45%,#ffc2d8 100%)",accent:"#d6336c",ink:"#4a1330",total:"&#8377;1,503",mrp:"&#8377;1,747",save:"save &#8377;244",items:[
+      {cat:"Cleanse",nm:"Glow+ Smoothie Face Wash",img:window.__resources["res_prod_facewash"],price:"&#8377;399",mrp:"&#8377;449",r:"4.7",n:"2.1k",when:"both"},
+      {cat:"Treat",nm:"Illuminate+ Glow Serum",img:window.__resources["res_prod_illuminate"],price:"&#8377;545",mrp:"&#8377;599",r:"4.7",n:"3.4k",when:"day"},
+      {cat:"Moisturise",nm:"Illuminate+ Hydrated Moisturizer",img:window.__resources["res_routine_facewash_am"],price:"&#8377;545",mrp:"&#8377;599",r:"4.6",n:"1.8k",when:"both"},
+      {cat:"Protect",nm:"Glow+ Dewy Sunscreen SPF 50+",img:window.__resources["res_rebel_spf_lifestyle"],price:"&#8377;559",mrp:"&#8377;699",r:"4.8",n:"26k",when:"day"}
     ]},
-    aashi:{handle:"@aashiadani",top:"#efe8fc",bottom:"#d3c4f6",grad:"linear-gradient(165deg,#efe8fc 0%,#ddd0f8 45%,#d3c4f6 100%)",accent:"#7a3ddb",ink:"#2f1a57",total:"&#8377;1,197",mrp:"&#8377;1,497",save:"save &#8377;300",items:[
-      {cat:"Gourmand",nm:"Sun Kissed Vanilla",img:window.__resources["res_sunkissed_lifestyle"],price:"&#8377;399",mrp:"&#8377;499",r:"4.8",n:"12k",when:"day"},
-      {cat:"Floral",nm:"Dewy Floral Kiss",img:window.__resources["res_scent_card"],price:"&#8377;399",mrp:"&#8377;499",r:"4.6",n:"4k",when:"both"},
-      {cat:"Amber",nm:"Mid Night Bloom",img:window.__resources["res_midnight_lifestyle"],price:"&#8377;399",mrp:"&#8377;499",r:"4.8",n:"9k",when:"night"}
+    aashi:{handle:"@aashiadani",top:"#efe8fc",bottom:"#d3c4f6",grad:"linear-gradient(165deg,#efe8fc 0%,#ddd0f8 45%,#d3c4f6 100%)",accent:"#7a3ddb",ink:"#2f1a57",total:"&#8377;2,242",mrp:"&#8377;2,546",save:"save &#8377;304",items:[
+      {cat:"Cleanse",nm:"Radiance+ Smoothie Face Wash",img:window.__resources["res_routine_moisturizer"],price:"&#8377;399",mrp:"&#8377;449",r:"4.7",n:"3.2k",when:"both"},
+      {cat:"Treat",nm:"Glow Boost Face Serum",img:window.__resources["res_routine_serum"],price:"&#8377;649",mrp:"&#8377;699",r:"4.8",n:"4.5k",when:"night"},
+      {cat:"Moisturise",nm:"Illuminate+ Hydrated Moisturizer",img:window.__resources["res_prod_moisturizer"],price:"&#8377;545",mrp:"&#8377;599",r:"4.6",n:"1.8k",when:"both"},
+      {cat:"Protect",nm:"Glow+ Dewy Sunscreen SPF 50+",img:window.__resources["res_rebel_spf_lifestyle"],price:"&#8377;559",mrp:"&#8377;699",r:"4.8",n:"26k",when:"day"}
     ]},
-    isb:{handle:"@indianskinblog",top:"#dbf3ec",bottom:"#b3e4d7",grad:"linear-gradient(165deg,#dbf3ec 0%,#c6ece0 45%,#b3e4d7 100%)",accent:"#0f8f72",ink:"#0e3a30",total:"&#8377;1,197",mrp:"&#8377;1,497",save:"save &#8377;300",items:[
-      {cat:"Floral",nm:"Dewy Floral Kiss",img:window.__resources["res_scent_card"],price:"&#8377;399",mrp:"&#8377;499",r:"4.6",n:"4k",when:"day"},
-      {cat:"Fruity",nm:"Cherry Blossom Bloom",img:window.__resources["res_cherry_bloom_lifestyle"],price:"&#8377;399",mrp:"&#8377;499",r:"4.7",n:"7k",when:"both"},
-      {cat:"Amber",nm:"Mid Night Bloom",img:window.__resources["res_midnight_lifestyle"],price:"&#8377;399",mrp:"&#8377;499",r:"4.8",n:"9k",when:"night"}
+    isb:{handle:"@indianskinblog",top:"#dbf3ec",bottom:"#b3e4d7",grad:"linear-gradient(165deg,#dbf3ec 0%,#c6ece0 45%,#b3e4d7 100%)",accent:"#0f8f72",ink:"#0e3a30",total:"&#8377;1,503",mrp:"&#8377;1,690",save:"save &#8377;187",items:[
+      {cat:"Cleanse",nm:"Glow+ Smoothie Face Wash",img:window.__resources["res_routine_facewash_pm"],price:"&#8377;399",mrp:"&#8377;449",r:"4.7",n:"2.1k",when:"both"},
+      {cat:"Treat",nm:"Glow Boost Face Serum",img:window.__resources["res_routine_serum"],price:"&#8377;649",mrp:"&#8377;699",r:"4.8",n:"4.5k",when:"night"},
+      {cat:"Moisturise",nm:"Illuminate+ Hydrated Moisturizer",img:window.__resources["res_routine_facewash_am"],price:"&#8377;545",mrp:"&#8377;599",r:"4.6",n:"1.8k",when:"both"},
+      {cat:"Protect",nm:"Glow+ Dewy Sunscreen SPF 50+",img:window.__resources["res_rebel_spf_lifestyle"],price:"&#8377;559",mrp:"&#8377;699",r:"4.8",n:"26k",when:"day"}
     ]}
   };
   function whenIcon(w){
@@ -2220,23 +2229,42 @@ layout();
   }
   function chk(){return '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4 10-11"></path></svg>';}
   function fmt(n){return '&#8377;'+n.toLocaleString('en-IN');}
-  function mistPack(nm){var s=(nm||'').toLowerCase();if(s.indexOf('vanilla')>-1)return window.__resources['res_bottle_vanilla'];if(s.indexOf('cherry')>-1)return window.__resources['res_bottle_cherry'];if(s.indexOf('night')>-1)return window.__resources['res_bottle_midnight'];if(s.indexOf('floral')>-1||s.indexOf('dewy')>-1)return window.__resources['res_bottle_floral'];return null;}
+  function packshot(nm){var n=nm.toLowerCase();
+    if(n.indexOf('sunscreen')>-1)return 'amin/sunscreen-hero.png';
+    if(n.indexOf('serum')>-1)return window.__resources['res_prod_illuminate'];
+    if(n.indexOf('wash')>-1||n.indexOf('cleans')>-1)return window.__resources['res_prod_facewash'];
+    if(n.indexOf('moistur')>-1)return window.__resources['res_prod_moisturizer'];
+    return null;}
+  function whenMini(w){
+    var sun='<svg viewBox="0 0 24 24" class="sun" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"></circle><line x1="12" y1="2.5" x2="12" y2="5"></line><line x1="12" y1="19" x2="12" y2="21.5"></line><line x1="2.5" y1="12" x2="5" y2="12"></line><line x1="19" y1="12" x2="21.5" y2="12"></line><line x1="5.4" y1="5.4" x2="7" y2="7"></line><line x1="17" y1="17" x2="18.6" y2="18.6"></line><line x1="5.4" y1="18.6" x2="7" y2="17"></line><line x1="17" y1="7" x2="18.6" y2="5.4"></line></svg>';
+    var moon='<svg viewBox="0 0 24 24" class="moon" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>';
+    if(w==='day')return sun;if(w==='night')return moon;return sun+moon;
+  }
+  function noteFor(nm,isHero){
+    if(isHero)return 'the one I reapply every afternoon';
+    var n=nm.toLowerCase();
+    if(n.indexOf('serum')>-1)return 'my glow drops, every single night';
+    if(n.indexOf('wash')>-1||n.indexOf('cleans')>-1)return 'where I always start';
+    if(n.indexOf('moistur')>-1)return 'locks the glow in before SPF';
+    return 'a staple on my shelf';
+  }
   function render(key){
     var d=data[key];
-    deck.innerHTML=d.items.map(function(it){
-      var pid=slug(it.nm),isHero=(it.nm===HERO_NM),inc=!!cart[pid];
+    deck.innerHTML=d.items.map(function(it,i){
+      var pid=slug(it.nm),isHero=(it.nm===HERO_NM),inc=!!cart[pid],ps=packshot(it.nm)||it.img,step=i+1;
       var btn='<button class="rt-add'+(inc?' incart-btn':'')+'" data-pid="'+pid+'">'+(inc?'Added':'+ Add')+'</button>';
-      return '<div class="rt-card'+(inc?' incart':'')+'" data-pid="'+pid+'" data-pimg="'+(mistPack(it.nm)||it.img)+'" data-cat="'+it.cat+'" data-r="'+it.r+'" data-n="'+it.n+'"><span class="rt-incart">'+chk()+'</span>'
-        +'<div class="rt-imgwrap"><span class="rt-when">'+whenIcon(it.when)+'</span><img src="'+it.img+'" alt="'+it.nm+'"></div>'
-        +'<div class="rt-info"><p class="rt-cat">'+it.cat+(isHero?' &middot; on this page':'')+'</p>'
+      var stepBadge=isHero?'<span class="rt-step here">you&rsquo;re here</span>':'';
+      return '<div class="rt-card'+(inc?' incart':'')+(isHero?' hero':'')+'" data-pid="'+pid+'" data-pimg="'+ps+'" data-cat="'+it.cat+'" data-r="'+it.r+'" data-n="'+it.n+'">'+stepBadge+'<span class="rt-incart">'+chk()+'</span>'
+        +'<div class="rt-imgwrap"><img src="'+it.img+'" alt="'+it.nm+'"></div>'
+        +'<div class="rt-info"><p class="rt-cat">Step '+step+' &middot; '+it.cat+'<span class="rt-when-mini">'+whenMini(it.when)+'</span></p>'
         +'<div class="rt-name">'+it.nm+'</div>'
-        +'<div class="rt-rate"><span class="rt-star">&#9733;</span> '+it.r+' &middot; '+it.n+' reviews</div>'
+        +'<div class="rt-note">&ldquo;'+(isHero?(d.handle+'&rsquo;s daily SPF for 4 months'):noteFor(it.nm,isHero))+'&rdquo;</div>'
         +'<div class="rt-buy"><span class="rt-price">'+it.price+'<s>'+it.mrp+'</s></span>'
         +btn+'</div></div></div>';
     }).join('');
     pile.innerHTML=d.items.map(function(it){
-      var pid=slug(it.nm),inc=!!cart[pid];
-      return '<span class="pcirc'+(inc?' in':'')+'" data-pid="'+pid+'"><img src="'+(mistPack(it.nm)||it.img)+'" alt=""><span class="pchk-w">'+chk()+'</span></span>';
+      var pid=slug(it.nm),inc=!!cart[pid],ps=packshot(it.nm)||it.img;
+      return '<span class="pcirc'+(inc?' in':'')+'" data-pid="'+pid+'"><img src="'+ps+'" alt=""><span class="pchk-w">'+chk()+'</span></span>';
     }).join('');
     renderSteps(d.items);
     updateBundle(key);
@@ -2244,7 +2272,7 @@ layout();
   var curStep=0;
   var STEP_ICONS={tube:'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="9" y="2.4" width="6" height="2.6" rx="1"></rect><path d="M8 7.4c0-1 .8-1.7 1.8-1.7h4.4c1 0 1.8.8 1.8 1.7V18a3.5 3.5 0 0 1-3.5 3.5h-1A3.5 3.5 0 0 1 8 18V7.4z"></path></svg>',dropper:'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10.4" y="2.4" width="3.2" height="4.2" rx="1"></rect><rect x="8" y="6.4" width="8" height="15.1" rx="3"></rect></svg>',jar:'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5.2" width="12" height="3.1" rx="1.4"></rect><rect x="5" y="9.4" width="14" height="10.2" rx="3.6"></rect></svg>',bottle:'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10.2" y="2.4" width="3.6" height="3.2" rx="1"></rect><path d="M9 5.6h6l1.1 2.4a3 3 0 0 1 .3 1.3V18a3.5 3.5 0 0 1-3.5 3.5h-2A3.5 3.5 0 0 1 7.5 18V9.3a3 3 0 0 1 .3-1.3z"></path></svg>'};
   function stepIcon(nm){var s=(nm||'').toLowerCase();if(s.indexOf('serum')>-1||s.indexOf('drops')>-1)return STEP_ICONS.dropper;if(s.indexOf('moistur')>-1||s.indexOf('cream')>-1)return STEP_ICONS.jar;if(s.indexOf('wash')>-1||s.indexOf('cleans')>-1||s.indexOf('sunscreen')>-1||s.indexOf('spf')>-1)return STEP_ICONS.tube;return STEP_ICONS.bottle;}
-  function renderSteps(items){if(!stepsEl)return;var n=items.length,html='<span class="rt-line"></span><span class="rt-fill" id="rtStepFill"></span>';for(var i=0;i<n;i++){html+='<button class="rt-node" data-step="'+i+'"><span class="rt-dot">'+stepIcon(items[i].nm)+'</span><span class="rt-nlbl">Step '+(i+1)+'</span></button>';}stepsEl.innerHTML=html;markStep(0);}
+  function renderSteps(items){if(!stepsEl)return;var n=items.length,html='<span class="rt-line"></span><span class="rt-fill" id="rtStepFill"></span>';for(var i=0;i<n;i++){html+='<button class="rt-node" data-step="'+i+'"><span class="rt-dot">'+stepIcon(items[i].nm)+'</span><span class="rt-nlbl"><b>Step '+(i+1)+'</b><span class="rt-cat2">'+items[i].cat+'</span></span></button>';}stepsEl.innerHTML=html;var hi=0;for(var h=0;h<items.length;h++){if(items[h].nm===HERO_NM){hi=h;break;}}markStep(hi);var applyHero=function(){var hcards=deck.querySelectorAll('.rt-card');if(hcards[hi]){deck.scrollLeft=Math.max(0,hcards[hi].offsetLeft-16);}markStep(hi);};applyHero();requestAnimationFrame(applyHero);setTimeout(applyHero,250);}
   function stepFill(idx){var fillEl=document.getElementById('rtStepFill');if(!stepsEl||!fillEl)return;var nodes=[].slice.call(stepsEl.querySelectorAll('.rt-node'));if(!nodes.length)return;var c0=nodes[0],cN=nodes[nodes.length-1],curN=nodes[Math.max(0,Math.min(idx,nodes.length-1))];var x0=c0.offsetLeft+c0.offsetWidth/2,xN=cN.offsetLeft+cN.offsetWidth/2,xc=curN.offsetLeft+curN.offsetWidth/2;var lineEl=stepsEl.querySelector('.rt-line');if(lineEl){lineEl.style.left=x0+'px';lineEl.style.width=Math.max(0,xN-x0)+'px';}fillEl.style.left=x0+'px';fillEl.style.width=Math.max(0,xc-x0)+'px';}
   function markStep(idx){if(!stepsEl)return;curStep=idx;[].forEach.call(stepsEl.querySelectorAll('.rt-node'),function(n,k){n.classList.toggle('on',k===idx);});stepFill(idx);}
   function gotoStep(idx){var cards=deck.querySelectorAll('.rt-card');if(cards[idx]){deck.scrollTo({left:Math.max(0,cards[idx].offsetLeft-16),behavior:'smooth'});}markStep(idx);}
@@ -2253,6 +2281,7 @@ layout();
     var rem=d.items.filter(function(it){return !cart[slug(it.nm)];});
     var inCount=d.items.length-rem.length;
     var prog=document.getElementById('rtProg');if(prog)prog.innerHTML=inCount+' of '+d.items.length+' in cart';
+    var hs=document.getElementById('rtHeroStep');if(hs){var hi=0;d.items.forEach(function(it,ix){if(it.nm===HERO_NM)hi=ix+1;});hs.textContent=hi;}
     var btn=document.getElementById('rtBundleBtn');
     var priceWrap=sec.querySelector('.rt-bundle-price');
     if(rem.length===0){
@@ -2274,7 +2303,7 @@ layout();
     if(card){card.classList.add('incart');var b=card.querySelector('.rt-add');if(b&&!b.disabled){b.classList.add('incart-btn');b.innerHTML='Added';}}
     var pc=pile.querySelector('.pcirc[data-pid="'+pid+'"]');
     if(pc){pc.classList.add('in');if(animate){pc.classList.remove('pop');void pc.offsetWidth;pc.classList.add('pop');}}
-    updateBundle(cur);
+    updateBundle(cur);if(window.__cartNotify)window.__cartNotify();
   }
   function unmark(pid){
     delete cart[pid];
@@ -2282,7 +2311,7 @@ layout();
     if(card){card.classList.remove('incart');var b=card.querySelector('.rt-add');if(b&&!b.disabled){b.classList.remove('incart-btn');b.innerHTML='+ Add';}}
     var pc=pile.querySelector('.pcirc[data-pid="'+pid+'"]');if(pc)pc.classList.remove('in');
     var cd=document.querySelector('.cart-dot');if(cd){cd.dataset.n=Math.max(0,(+cd.dataset.n||0)-1);}
-    updateBundle(cur);
+    updateBundle(cur);if(window.__cartNotify)window.__cartNotify();
   }
   function setInf(key){
     cur=key;var inf=data[key];
@@ -2292,7 +2321,8 @@ layout();
     sec.style.setProperty('--rt-accent',inf.accent);
     if(handleEl)handleEl.textContent=inf.handle;
     var ph=document.getElementById('rtPairHandle');if(ph)ph.textContent=inf.handle;
-    var mo=document.getElementById('rtMore');if(mo)mo.textContent=(inf.items.length-1);
+    var fh=document.getElementById('rtFootHandle');if(fh)fh.textContent=inf.handle;
+    var pf=document.getElementById('rtProofHandle');if(pf)pf.textContent=inf.handle;
     [].forEach.call(chips.querySelectorAll('.rt-chip'),function(b){b.classList.toggle('on',b.dataset.inf===key);});
     render(key);
   }
@@ -2300,12 +2330,12 @@ layout();
   chips.addEventListener('click',function(e){var b=e.target.closest('.rt-chip');if(!b)return;setInf(b.dataset.inf);});
   window.addEventListener('resize',function(){stepFill(curStep);});
   if(stepsEl){stepsEl.addEventListener('click',function(e){var b=e.target.closest('.rt-node');if(!b)return;gotoStep(+b.dataset.step);});}
-  var stT;deck.addEventListener('scroll',function(){clearTimeout(stT);stT=setTimeout(function(){var cards=[].slice.call(deck.querySelectorAll('.rt-card'));if(!cards.length)return;var best=0,bd=1e9;cards.forEach(function(c,k){var dd=Math.abs(c.offsetLeft-16-deck.scrollLeft);if(dd<bd){bd=dd;best=k;}});markStep(best);},80);});
+  var stT;deck.addEventListener('scroll',function(){clearTimeout(stT);stT=setTimeout(function(){var cards=[].slice.call(deck.querySelectorAll('.rt-card'));if(!cards.length)return;var vc=deck.scrollLeft+deck.clientWidth/2,best=0,bd=1e9;cards.forEach(function(c,k){var cc=c.offsetLeft+c.offsetWidth/2;var dd=Math.abs(cc-vc);if(dd<bd){bd=dd;best=k;}});markStep(best);},80);});
   deck.addEventListener('click',function(e){
     var a=e.target.closest('.rt-add');if(!a||a.disabled)return;
     var pid=a.dataset.pid;
     if(cart[pid]){unmark(pid);}
-    else{markIn(pid,true);if(window.__cartFly){var c=a.closest('.rt-card');window.__cartFly(e.clientX,e.clientY,(c&&c.dataset.pimg)||'amin/mist/product-hero.png');}}
+    else{markIn(pid,true);if(window.__cartFly){var card=a.closest('.rt-card');window.__cartFly(e.clientX,e.clientY,card?card.dataset.pimg:null);}}
   });
   var bundleBtn=document.getElementById('rtBundleBtn');
   bundleBtn.addEventListener('click',function(e){
@@ -2316,7 +2346,7 @@ layout();
       markIn(pid,true);
       if(window.__cartFly){var pc=pile.querySelector('.pcirc[data-pid="'+pid+'"]'),x=bx,y=by;
         if(pc){var rr=pc.getBoundingClientRect();x=rr.left+rr.width/2;y=rr.top+rr.height/2;}
-        window.__cartFly(x,y,mistPack(it.nm)||it.img);}
+        window.__cartFly(x,y,packshot(it.nm)||it.img);}
     },idx*150);});
   });
   var heroPid=slug(HERO_NM);
@@ -2324,6 +2354,17 @@ layout();
     var b=e.target.closest('.btn.cart');if(!b)return;
     if(!cart[heroPid])markIn(heroPid,true);
   });
+  function syncCartUI(){
+    var dd=data[cur];if(!dd)return;
+    dd.items.forEach(function(it){
+      var pid=slug(it.nm),inc=!!cart[pid];
+      var card=deck.querySelector('.rt-card[data-pid="'+pid+'"]');
+      if(card){card.classList.toggle('incart',inc);var b=card.querySelector('.rt-add');if(b){b.classList.toggle('incart-btn',inc);b.innerHTML=inc?'Added':'+ Add';}}
+      var pc=pile.querySelector('.pcirc[data-pid="'+pid+'"]');if(pc)pc.classList.toggle('in',inc);
+    });
+    updateBundle(cur);
+  }
+  window.__cartSubs=window.__cartSubs||[];window.__cartSubs.push(syncCartUI);
   setInf('rebel');
 })();
 
@@ -3861,6 +3902,8 @@ ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<TweakApp/>);
 .dermnote-hd b{font-family:'Sora';font-weight:800;font-size:14px;color:var(--ink);display:block;}
 .dermnote-hd em{font-style:normal;font-size:11.5px;color:var(--ink-soft);}
 .dermnote p{margin:0;font-size:13.5px;line-height:1.55;color:var(--ink);font-style:italic;}
+.rt-spark{width:13px;height:13px;display:inline-block;vertical-align:-1px;color:var(--rt-accent,#e0521b);margin-left:5px;}
+.rt-spark{flex:none;margin:2px 0 0;width:16px;height:16px;}
 [data-screen-label="Experience the Fragrance"],[data-screen-label="Fragrance Scale"]{display:none!important;}
 </style>
 </body>
