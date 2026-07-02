@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Influencer Widget — Image-First Explorations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --accent:#e0521b; --ink:#3a2410; --muted:#7c6a58;
+  --top:#fdf3ec; --bottom:#fbe7dd;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;}
+body{
+  font-family:'DM Sans',system-ui,sans-serif;
+  background:#e9e3dc;
+  color:var(--ink);
+  padding:44px 32px 90px;
+  -webkit-font-smoothing:antialiased;
+}
+.page-head{max-width:1400px;margin:0 auto 40px;}
+.page-head h1{font-family:'Sora';font-weight:800;font-size:26px;margin:0 0 6px;letter-spacing:-.01em;}
+.page-head p{margin:0;color:var(--muted);font-size:15px;max-width:640px;line-height:1.5;}
+.row{display:flex;flex-wrap:wrap;gap:56px;justify-content:center;align-items:flex-start;max-width:1500px;margin:0 auto;}
+.col{display:flex;flex-direction:column;align-items:center;gap:16px;}
+.tag{display:flex;align-items:center;gap:10px;}
+.tag .id{font-family:'Sora';font-weight:800;font-size:13px;background:var(--ink);color:#fff;border-radius:8px;padding:4px 9px;letter-spacing:.02em;}
+.tag .nm{font-family:'Sora';font-weight:700;font-size:15px;color:var(--ink);}
+.tag .sub{font-size:13px;color:var(--muted);}
+.tagline{font-size:13px;color:var(--muted);max-width:402px;text-align:center;line-height:1.45;}
+
+/* phone shell */
+.phone{width:402px;background:linear-gradient(180deg,var(--top),var(--bottom));border-radius:30px;padding:16px;box-shadow:0 30px 60px -24px rgba(60,36,16,.35);}
+.wtitle{display:flex;align-items:baseline;gap:8px;padding:6px 6px 16px;}
+.wtitle .big{font-family:'Sora';font-weight:800;font-size:19px;letter-spacing:-.01em;}
+.wtitle .num{color:var(--accent);}
+
+/* ============ 1a — FULL-BLEED REEL ============ */
+.reel{position:relative;border-radius:22px;overflow:hidden;height:520px;background:#ddd;}
+.reel-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .35s;}
+.reel-grad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.28) 0%,rgba(0,0,0,0) 24%,rgba(0,0,0,0) 46%,rgba(0,0,0,.62) 100%);}
+.reel-top{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;padding:14px;gap:8px;}
+.reel-step{font-family:'Sora';font-weight:800;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.28);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:7px 11px;border-radius:20px;}
+.reel-inf{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:4px 12px 4px 4px;border-radius:22px;font-family:'Sora';font-weight:700;font-size:12.5px;color:var(--ink);}
+.reel-inf img{width:26px;height:26px;border-radius:50%;object-fit:cover;}
+.reel-glass{position:absolute;left:12px;right:12px;bottom:12px;display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:18px;padding:11px;}
+.reel-pack{width:60px;height:60px;border-radius:13px;object-fit:contain;background:#fff;padding:5px;flex:none;box-shadow:0 4px 12px rgba(0,0,0,.08);}
+.reel-meta{flex:1;min-width:0;}
+.reel-name{font-family:'Sora';font-weight:800;font-size:15px;line-height:1.15;color:var(--ink);}
+.reel-price{margin-top:4px;font-family:'Sora';font-weight:800;font-size:16px;color:var(--ink);}
+.reel-price s{font-weight:600;font-size:13px;color:var(--muted);margin-left:6px;}
+.reel-add{flex:none;width:46px;height:46px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:26px;font-weight:400;line-height:1;cursor:pointer;display:grid;place-items:center;box-shadow:0 6px 16px rgba(224,82,27,.4);transition:transform .12s;}
+.reel-add:active{transform:scale(.9);}
+.reel-add.on{background:#1f9d55;box-shadow:0 6px 16px rgba(31,157,85,.4);}
+.reel-strip{display:flex;gap:9px;padding:14px 4px 4px;}
+.reel-thumb{flex:1;aspect-ratio:1/1.12;border-radius:13px;overflow:hidden;position:relative;cursor:pointer;background:#ddd;box-shadow:0 3px 8px rgba(0,0,0,.1);opacity:.62;transition:opacity .25s,transform .12s;}
+.reel-thumb img{width:100%;height:100%;object-fit:cover;}
+.reel-thumb .rn{position:absolute;top:5px;left:6px;font-family:'Sora';font-weight:800;font-size:10px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);}
+.reel-thumb.on{opacity:1;box-shadow:0 0 0 3px var(--accent),0 4px 12px rgba(0,0,0,.18);}
+.reel-thumb:active{transform:scale(.95);}
+
+/* ============ 1b — EDITORIAL SPLIT / SHOP THE LOOK ============ */
+.ed-avs{display:flex;gap:8px;padding:2px 4px 14px;}
+.ed-av{display:flex;align-items:center;gap:7px;border:0;background:transparent;padding:3px 11px 3px 3px;border-radius:22px;cursor:pointer;font-family:'Sora';font-weight:700;font-size:12.5px;color:var(--ink);opacity:.7;transition:.2s;}
+.ed-av img{width:28px;height:28px;border-radius:50%;object-fit:cover;}
+.ed-av.on{opacity:1;background:#fff;box-shadow:0 3px 10px rgba(0,0,0,.1);}
+.ed-hero{position:relative;border-radius:20px;overflow:hidden;height:330px;background:#ddd;}
+.ed-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .3s;}
+.ed-hero .g{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(0,0,0,.55));}
+.ed-cap{position:absolute;left:14px;bottom:12px;right:14px;color:#fff;}
+.ed-cap .k{font-family:'Sora';font-weight:800;font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.9;}
+.ed-cap .t{font-family:'Sora';font-weight:800;font-size:18px;line-height:1.1;margin-top:2px;}
+.ed-scroller{display:flex;gap:12px;overflow-x:auto;padding:16px 4px 6px;scroll-snap-type:x mandatory;-ms-overflow-style:none;scrollbar-width:none;}
+.ed-scroller::-webkit-scrollbar{display:none;}
+.ed-tile{scroll-snap-align:start;flex:0 0 152px;cursor:pointer;}
+.ed-pack{position:relative;height:170px;border-radius:16px;background:radial-gradient(120% 90% at 50% 20%,#fff,#f4ece3);display:grid;place-items:center;overflow:hidden;transition:box-shadow .2s;}
+.ed-pack img{height:150px;object-fit:contain;filter:drop-shadow(0 10px 16px rgba(0,0,0,.12));}
+.ed-pack .step{position:absolute;top:9px;left:10px;font-family:'Sora';font-weight:800;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);}
+.ed-tile.on .ed-pack{box-shadow:0 0 0 2px var(--accent);}
+.ed-info{padding:10px 3px 0;}
+.ed-name{font-family:'Sora';font-weight:700;font-size:13.5px;line-height:1.2;height:33px;overflow:hidden;}
+.ed-foot{display:flex;align-items:center;justify-content:space-between;margin-top:7px;}
+.ed-price{font-family:'Sora';font-weight:800;font-size:15px;}
+.ed-price s{font-weight:600;font-size:11.5px;color:var(--muted);margin-left:4px;}
+.ed-plus{width:32px;height:32px;border-radius:10px;border:0;background:var(--ink);color:#fff;font-size:19px;line-height:1;cursor:pointer;flex:none;transition:transform .12s,background .2s;}
+.ed-plus:active{transform:scale(.9);}
+.ed-plus.on{background:#1f9d55;}
+
+/* ============ 1c — STORY STICKER ============ */
+.story{position:relative;border-radius:22px;overflow:hidden;height:600px;background:#ddd;user-select:none;}
+.story-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .3s;}
+.story-g{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.4) 0%,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 55%,rgba(0,0,0,.68) 100%);}
+.story-bars{position:absolute;top:12px;left:12px;right:12px;display:flex;gap:5px;z-index:3;}
+.story-bar{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.35);overflow:hidden;}
+.story-bar i{display:block;height:100%;width:0;background:#fff;border-radius:2px;transition:width .3s;}
+.story-bar.done i{width:100%;}
+.story-bar.cur i{width:100%;}
+.story-head{position:absolute;top:26px;left:14px;display:flex;align-items:center;gap:8px;z-index:3;color:#fff;}
+.story-head img{width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.85);}
+.story-head b{font-family:'Sora';font-weight:700;font-size:13.5px;}
+.story-head span{font-size:11px;opacity:.85;display:block;margin-top:1px;}
+.story-sticker{position:absolute;right:14px;top:44%;z-index:3;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:16px;padding:8px 12px 8px 8px;box-shadow:0 10px 26px rgba(0,0,0,.28);animation:pop .35s;}
+@keyframes pop{from{transform:scale(.85);}to{transform:scale(1);}}
+.story-sticker img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:10px;padding:3px;}
+.story-sticker .sn{font-family:'Sora';font-weight:800;font-size:12px;line-height:1.1;max-width:118px;}
+.story-sticker .sp{font-family:'Sora';font-weight:800;font-size:12px;color:var(--accent);margin-top:3px;}
+.story-tap{position:absolute;top:0;bottom:120px;width:38%;z-index:2;cursor:pointer;}
+.story-tap.l{left:0;}
+.story-tap.r{right:0;}
+.story-bottom{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:16px 14px 18px;}
+.story-k{font-family:'Sora';font-weight:800;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#fff;opacity:.92;}
+.story-name{font-family:'Sora';font-weight:800;font-size:20px;color:#fff;line-height:1.12;margin:3px 0 12px;}
+.story-cta{display:flex;align-items:center;gap:12px;}
+.story-price{color:#fff;font-family:'Sora';font-weight:800;font-size:19px;}
+.story-price s{font-weight:600;font-size:13px;opacity:.7;margin-left:6px;}
+.story-add{flex:1;height:48px;border:0;border-radius:26px;background:#fff;color:var(--ink);font-family:'Sora';font-weight:800;font-size:15px;cursor:pointer;transition:transform .12s;}
+.story-add:active{transform:scale(.97);}
+.story-add.on{background:var(--accent);color:#fff;}
+
+/* ============ 3a — SWIPEABLE STORY REEL ============ */
+.rs-card{position:relative;border-radius:22px;overflow:hidden;height:600px;background:#ddd;user-select:none;}
+.rs-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .3s;}
+.rs-grad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.42) 0%,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 52%,rgba(0,0,0,.66) 100%);}
+.rs-bars{position:absolute;top:12px;left:12px;right:12px;display:flex;gap:5px;z-index:3;}
+.rs-bar{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.35);overflow:hidden;cursor:pointer;}
+.rs-bar i{display:block;height:100%;width:0;background:#fff;border-radius:2px;transition:width .3s;}
+.rs-bar.done i,.rs-bar.cur i{width:100%;}
+.rs-head{position:absolute;top:26px;left:14px;display:flex;align-items:center;gap:9px;z-index:3;color:#fff;}
+.rs-head img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.85);}
+.rs-head b{font-family:'Sora';font-weight:700;font-size:14px;}
+.rs-head span{font-size:11px;opacity:.85;display:block;margin-top:1px;}
+.rs-tap{position:absolute;top:60px;bottom:100px;width:42%;z-index:2;cursor:pointer;}
+.rs-tap.l{left:0;}
+.rs-tap.r{right:0;}
+.rs-shop{position:absolute;left:12px;right:12px;bottom:12px;z-index:4;display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:18px;padding:11px;box-shadow:0 12px 30px rgba(0,0,0,.26);}
+.rs-pack{width:58px;height:58px;border-radius:13px;object-fit:contain;background:#fff;padding:5px;flex:none;box-shadow:0 4px 12px rgba(0,0,0,.08);}
+.rs-meta{flex:1;min-width:0;}
+.rs-name{font-family:'Sora';font-weight:800;font-size:15.5px;line-height:1.18;color:var(--ink);}
+.rs-price{margin-top:5px;font-family:'Sora';font-weight:800;font-size:16px;color:var(--ink);}
+.rs-price s{font-weight:600;font-size:13px;color:var(--muted);margin-left:6px;}
+.rs-add{flex:none;width:48px;height:48px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:27px;font-weight:400;line-height:1;cursor:pointer;display:grid;place-items:center;box-shadow:0 6px 16px rgba(224,82,27,.4);transition:transform .12s,background .2s;}
+.rs-add:active{transform:scale(.9);}
+.rs-add.on{background:#1f9d55;box-shadow:0 6px 16px rgba(31,157,85,.4);}
+
+/* ============ turn heads ============ */
+.turn-head{max-width:1500px;margin:0 auto 22px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.turn-head .lbl{font-family:'Sora';font-weight:800;font-size:13px;background:var(--accent);color:#fff;border-radius:8px;padding:5px 11px;letter-spacing:.02em;}
+.turn-head .txt{font-family:'Sora';font-weight:700;font-size:16px;color:var(--ink);}
+.turn-head .txt span{color:var(--muted);font-weight:500;font-size:14px;margin-left:8px;}
+.turn-divider{max-width:1500px;margin:64px auto 36px;border:0;border-top:1.5px dashed #cdbfb0;}
+
+/* ============ shared creator rail (turn 2) ============ */
+.cr-rail{display:flex;gap:8px;padding:2px 4px 14px;overflow-x:auto;scrollbar-width:none;}
+.cr-rail::-webkit-scrollbar{display:none;}
+.cr-chip{display:flex;align-items:center;gap:8px;border:0;background:rgba(255,255,255,.5);padding:4px 15px 4px 4px;border-radius:24px;cursor:pointer;font-family:'Sora';font-weight:700;font-size:13px;color:var(--ink);white-space:nowrap;transition:.2s;flex:none;}
+.cr-chip img{width:30px;height:30px;border-radius:50%;object-fit:cover;}
+.cr-chip.on{background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.13);}
+
+/* ============ 2a — SHOP THE ROUTINE (multi-select) ============ */
+.sr-hero{position:relative;border-radius:20px;overflow:hidden;height:290px;background:#ddd;}
+.sr-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .3s;}
+.sr-hg{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(0,0,0,.5));}
+.sr-cap{position:absolute;left:14px;bottom:12px;color:#fff;}
+.sr-k{font-family:'Sora';font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;}
+.sr-scroller{display:flex;gap:11px;overflow-x:auto;padding:14px 4px 8px;scrollbar-width:none;}
+.sr-scroller::-webkit-scrollbar{display:none;}
+.sr-tile{flex:0 0 140px;cursor:pointer;}
+.sr-pack{position:relative;height:150px;border-radius:16px;background:radial-gradient(120% 90% at 50% 20%,#fff,#f4ece3);display:grid;place-items:center;overflow:hidden;transition:.2s;}
+.sr-pack img{height:128px;object-fit:contain;filter:drop-shadow(0 8px 14px rgba(0,0,0,.12));}
+.sr-step{position:absolute;top:8px;left:10px;right:10px;font-family:'Sora';font-weight:800;font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);}
+.sr-check{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:#1f9d55;color:#fff;display:grid;place-items:center;font-size:13px;font-weight:800;opacity:0;transform:scale(.6);transition:.2s;box-shadow:0 3px 8px rgba(0,0,0,.18);}
+.sr-tile.sel .sr-check{opacity:1;transform:scale(1);}
+.sr-tile.sel .sr-pack{box-shadow:0 0 0 2.5px #1f9d55;}
+.sr-name{font-family:'Sora';font-weight:700;font-size:13px;line-height:1.2;height:32px;overflow:hidden;margin-top:9px;}
+.sr-tile.act .sr-name{color:var(--accent);}
+.sr-row{display:flex;align-items:center;justify-content:space-between;margin-top:6px;gap:6px;}
+.sr-price{font-family:'Sora';font-weight:800;font-size:14px;}
+.sr-price s{font-weight:600;font-size:11px;color:var(--muted);margin-left:3px;}
+.sr-toggle{border:0;background:var(--accent);color:#fff;font-family:'Sora';font-weight:800;font-size:11.5px;border-radius:20px;padding:8px 12px;cursor:pointer;transition:.15s;white-space:nowrap;flex:none;}
+.sr-toggle.sel{background:#1f9d55;}
+.sr-bar{margin:8px 4px 4px;display:flex;align-items:center;gap:12px;background:var(--ink);border-radius:18px;padding:12px 14px;color:#fff;}
+.sr-sum{flex:1;line-height:1.3;min-width:0;}
+.sr-sum b{font-family:'Sora';font-weight:800;font-size:14.5px;display:block;}
+.sr-sum span{font-size:12px;opacity:.82;}
+.sr-cta{border:0;background:var(--accent);color:#fff;font-family:'Sora';font-weight:800;font-size:14px;border-radius:24px;padding:12px 18px;cursor:pointer;white-space:nowrap;transition:transform .12s;}
+.sr-cta:active{transform:scale(.97);}
+
+/* ============ 2b — REEL + ROUTINE TRAY ============ */
+.rl2{position:relative;border-radius:20px;overflow:hidden;height:400px;background:#ddd;}
+.rl2-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .3s;}
+.rl2-g{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.16) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,0) 45%,rgba(0,0,0,.6) 100%);}
+.rl2-badge{position:absolute;top:12px;left:12px;font-family:'Sora';font-weight:800;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.3);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:6px 11px;border-radius:20px;}
+.rl2-glass{position:absolute;left:10px;right:10px;bottom:10px;display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:16px;padding:9px;}
+.rl2-pack{width:52px;height:52px;border-radius:12px;object-fit:contain;background:#fff;padding:4px;flex:none;}
+.rl2-meta{flex:1;min-width:0;}
+.rl2-name{font-family:'Sora';font-weight:800;font-size:14px;line-height:1.15;}
+.rl2-price{font-family:'Sora';font-weight:800;font-size:14px;margin-top:2px;}
+.rl2-price s{font-weight:600;font-size:11.5px;color:var(--muted);margin-left:5px;}
+.rl2-toggle{flex:none;width:42px;height:42px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:22px;line-height:1;display:grid;place-items:center;cursor:pointer;transition:.15s;}
+.rl2-toggle.sel{background:#1f9d55;}
+.rl2-toggle:active{transform:scale(.9);}
+.rl2-steps{display:flex;gap:6px;padding:14px 2px 4px;}
+.rl2-node{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;border:0;background:transparent;cursor:pointer;padding:0;}
+.rl2-dot{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.6);color:var(--muted);font-family:'Sora';font-weight:800;font-size:13px;display:grid;place-items:center;transition:.2s;position:relative;}
+.rl2-node.on .rl2-dot{background:var(--accent);color:#fff;}
+.rl2-node.sel .rl2-dot::after{content:'✓';position:absolute;bottom:-2px;right:-2px;width:15px;height:15px;font-size:9px;background:#1f9d55;color:#fff;border-radius:50%;display:grid;place-items:center;border:2px solid var(--top);}
+.rl2-lbl{font-family:'Sora';font-weight:700;font-size:10.5px;color:var(--ink);opacity:.72;}
+.rl2-node.on .rl2-lbl{opacity:1;color:var(--accent);}
+.rl2-tray{margin-top:14px;display:flex;align-items:center;gap:12px;background:var(--ink);border-radius:18px;padding:12px 14px;color:#fff;}
+.rl2-sum{flex:1;line-height:1.3;min-width:0;}
+.rl2-sum b{font-family:'Sora';font-weight:800;font-size:14.5px;display:block;}
+.rl2-sum span{font-size:12px;opacity:.82;}
+.rl2-cta{border:0;background:var(--accent);color:#fff;font-family:'Sora';font-weight:800;font-size:14px;border-radius:24px;padding:12px 18px;cursor:pointer;white-space:nowrap;transition:transform .12s;}
+.rl2-cta:active{transform:scale(.97);}
+</style>
+</head>
+<body>
+<div class="page-head">
+  <h1>Influencer widget — image-first explorations</h1>
+  <p>Three turns. <b>Turn 3</b> (top) is a swipeable full-bleed story reel. <b>Turn 2</b> answers the open questions: a clear creator switcher, a distinct numbered stepper, and routine multi-select with a live total. <b>Turn 1</b> (below) is the original three. Everything is live — switch creators/steps and toggle products.</p>
+</div>
+
+<div class="turn-head"><span class="lbl">Turn 3</span><span class="txt">Swipeable story reel — no center sticker, bottom shop pill<span>tap left/right through the routine · starts on step 3 · past step 4 rolls into the next creator</span></span></div>
+<div class="row">
+  <div class="col">
+    <div class="tag"><span class="id">3a</span><span class="nm">Swipeable story reel</span></div>
+    <p class="tagline">Photo <em>is</em> the card. Tap left/right to move through the routine; the frosted shop pill follows each step. Past the last step you roll into the next creator's first story.</p>
+    <div class="phone" id="phone3">
+      <div class="wtitle"><span class="num">12,736</span><span class="big" style="font-weight:400;text-transform:lowercase">creators are layering this sunscreen</span></div>
+      <div class="rs-card">
+        <img class="rs-photo" id="rsPhoto" alt="">
+        <div class="rs-grad"></div>
+        <div class="rs-bars" id="rsBars"></div>
+        <div class="rs-head"><img id="rsAv" alt=""><div><b id="rsHandle"></b><span>4-step glow routine</span></div></div>
+        <div class="rs-tap l" id="rsPrev"></div>
+        <div class="rs-tap r" id="rsNext"></div>
+        <div class="rs-shop">
+          <img class="rs-pack" id="rsPack" alt="">
+          <div class="rs-meta"><div class="rs-name" id="rsName"></div><div class="rs-price" id="rsPrice"></div></div>
+          <button class="rs-add" id="rsAdd" aria-label="Add">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="turn-head"><span class="lbl">Turn 2</span><span class="txt">Refined — creator rail + stepper + routine multi-select<span>solves: how to switch creators · steps read as duplicates · unclear you can add 1–4</span></span></div>
+<div class="row">
+  <!-- ============ 2b ============ -->
+  <div class="col">
+    <div class="tag"><span class="id">2b</span><span class="nm">Reel + routine tray</span></div>
+    <p class="tagline">Photo leads. A numbered stepper makes the 4 steps unmistakably distinct; toggle each into your routine and the dark tray tallies total &amp; saving.</p>
+    <div class="phone" id="phoneB2">
+      <div class="wtitle"><span class="num">12,736</span><span class="big">creators layer this routine</span></div>
+      <div class="cr-rail" id="crRailB"></div>
+      <div class="rl2">
+        <img class="rl2-photo" id="rl2Photo" alt="">
+        <div class="rl2-g"></div>
+        <span class="rl2-badge" id="rl2Badge">Step 1 · Cleanse</span>
+        <div class="rl2-glass">
+          <img class="rl2-pack" id="rl2Pack" alt="">
+          <div class="rl2-meta"><div class="rl2-name" id="rl2Name"></div><div class="rl2-price" id="rl2Price"></div></div>
+          <button class="rl2-toggle" id="rl2Toggle">+</button>
+        </div>
+      </div>
+      <div class="rl2-steps" id="rl2Steps"></div>
+      <div class="rl2-tray">
+        <div class="rl2-sum"><b id="rl2Count">4 of 4 in routine</b><span id="rl2Save">save ₹244</span></div>
+        <button class="rl2-cta" id="rl2Cta">Add 4 · ₹2,152</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="turn-divider">
+<div class="turn-head"><span class="lbl">Turn 1</span><span class="txt">Original three image-first directions</span></div>
+<div class="row">
+  <!-- ============ 1a ============ -->
+  <div class="col">
+    <div class="tag"><span class="id">1a</span><span class="nm">Full-bleed reel</span></div>
+    <p class="tagline">Photo <em>is</em> the card. Product lives in a frosted bar; steps are a photo filmstrip.</p>
+    <div class="phone">
+      <div class="wtitle"><span class="num">12,736</span><span class="big">creators layer this routine</span></div>
+      <div class="reel" id="reelA">
+        <img class="reel-photo" id="reelPhoto" src="amin/inf-sunscreen.png" alt="">
+        <div class="reel-grad"></div>
+        <div class="reel-top">
+          <span class="reel-step" id="reelStep">Step 4 · Protect</span>
+          <span class="reel-inf"><img src="amin/inf-rebel.png" alt="">@rebel.kid</span>
+        </div>
+        <div class="reel-glass">
+          <img class="reel-pack" id="reelPack" src="amin/prod-sunscreen.png" alt="">
+          <div class="reel-meta">
+            <div class="reel-name" id="reelName">Glow+ Dewy Sunscreen SPF 50+</div>
+            <div class="reel-price" id="reelPrice">₹559 <s>₹699</s></div>
+          </div>
+          <button class="reel-add" id="reelAdd" aria-label="Add">+</button>
+        </div>
+      </div>
+      <div class="reel-strip" id="reelStrip"></div>
+    </div>
+  </div>
+
+  <!-- ============ 1b ============ -->
+  <div class="col">
+    <div class="tag"><span class="id">1b</span><span class="nm">Shop the look</span></div>
+    <p class="tagline">Big creator hero on top, packshot-led product tiles below. Tap a tile → hero swaps.</p>
+    <div class="phone">
+      <div class="wtitle"><span class="num">12,736</span><span class="big">creators, one glow routine</span></div>
+      <div class="ed-avs" id="edAvs"></div>
+      <div class="ed-hero">
+        <img id="edHero" src="amin/inf-facewash.png" alt="">
+        <div class="g"></div>
+        <div class="ed-cap"><div class="k" id="edHeroK">Step 1 · Cleanse</div><div class="t">@rebel.kid's daily glow</div></div>
+      </div>
+      <div class="ed-scroller" id="edScroller"></div>
+    </div>
+  </div>
+
+  <!-- ============ 1c ============ -->
+  <div class="col">
+    <div class="tag"><span class="id">1c</span><span class="nm">Story sticker</span></div>
+    <p class="tagline">IG-story feel. Tap sides to move through the routine; product rides as a shopping sticker.</p>
+    <div class="phone">
+      <div class="story" id="story">
+        <img class="story-photo" id="storyPhoto" src="amin/inf-facewash.png" alt="">
+        <div class="story-g"></div>
+        <div class="story-bars" id="storyBars"></div>
+        <div class="story-head"><img src="amin/inf-rebel.png" alt=""><div><b>@rebel.kid</b><span>4-step glow routine</span></div></div>
+        <div class="story-tap l" id="storyPrev"></div>
+        <div class="story-tap r" id="storyNext"></div>
+        <div class="story-sticker" id="storySticker">
+          <img id="stImg" src="amin/prod-facewash.png" alt="">
+          <div><div class="sn" id="stName">Glow+ Smoothie Face Wash</div><div class="sp" id="stPrice">₹399</div></div>
+        </div>
+        <div class="story-bottom">
+          <div class="story-k" id="stK">Step 1 · Cleanse</div>
+          <div class="story-name" id="stBig">Glow+ Smoothie Face Wash</div>
+          <div class="story-cta">
+            <div class="story-price" id="stFull">₹399 <s>₹449</s></div>
+            <button class="story-add" id="stAdd">Add to bag</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== turn 2 shared data ===== */
+const CREATORS=[
+  {key:'rebel',handle:'@rebel.kid',av:'amin/inf-rebel.png',accent:'#e0521b',top:'#fdf3ec',bottom:'#fbe7dd',suffix:''},
+  {key:'tarini',handle:'@tarinipeshawaria',av:'amin/inf-tarini.png',accent:'#d6336c',top:'#ffe3ee',bottom:'#ffd0e0',suffix:'-tarini'},
+];
+const RSTEPS=[
+  {cat:'Cleanse',n:'Glow+ Smoothie Face Wash',price:399,mrp:449,pack:'amin/prod-facewash.png',life:'inf-facewash'},
+  {cat:'Treat',n:'Glow Boost Face Serum',price:649,mrp:699,pack:'amin/boost-product.png',life:'inf-serum'},
+  {cat:'Moisturise',n:'Illuminate+ Hydra Gel',price:545,mrp:599,pack:'amin/prod-moisturizer.png',life:'inf-moisturiser'},
+  {cat:'Protect',n:'Glow+ Dewy Sunscreen SPF 50+',price:559,mrp:699,pack:'amin/prod-sunscreen.png',life:'inf-sunscreen'},
+];
+const rup=n=>'₹'+n.toLocaleString('en-IN');
+const lifeOf=(s,cr)=>`amin/${s.life}${cr.suffix}.png`;
+
+/* ---------- 2b — reel + routine tray ---------- */
+(function(){
+  const rail=document.getElementById('crRailB'),phone=document.getElementById('phoneB2');
+  const photo=document.getElementById('rl2Photo'),badge=document.getElementById('rl2Badge');
+  const pack=document.getElementById('rl2Pack'),nm=document.getElementById('rl2Name'),pr=document.getElementById('rl2Price'),tog=document.getElementById('rl2Toggle');
+  const stepsEl=document.getElementById('rl2Steps'),count=document.getElementById('rl2Count'),save=document.getElementById('rl2Save'),cta=document.getElementById('rl2Cta');
+  let ci=0,active=0,sel=[true,true,true,true];
+  rail.innerHTML=CREATORS.map((c,i)=>`<button class="cr-chip${i===0?' on':''}" data-i="${i}"><img src="${c.av}" alt="">${c.handle}</button>`).join('');
+  function theme(){const c=CREATORS[ci];phone.style.setProperty('--accent',c.accent);phone.style.setProperty('--top',c.top);phone.style.setProperty('--bottom',c.bottom);phone.style.background=`linear-gradient(180deg,${c.top},${c.bottom})`;}
+  function renderSteps(){stepsEl.innerHTML=RSTEPS.map((s,i)=>`<button class="rl2-node${i===active?' on':''}${sel[i]?' sel':''}" data-i="${i}"><span class="rl2-dot">${i+1}</span><span class="rl2-lbl">${s.cat}</span></button>`).join('');}
+  function showStep(){const cr=CREATORS[ci],s=RSTEPS[active];photo.src=lifeOf(s,cr);photo.style.opacity=1;
+    badge.textContent=`Step ${active+1} · ${s.cat}`;pack.src=s.pack;nm.textContent=s.n;pr.innerHTML=`${rup(s.price)} <s>${rup(s.mrp)}</s>`;
+    tog.classList.toggle('sel',sel[active]);tog.textContent=sel[active]?'✓':'+';
+    [...stepsEl.children].forEach((x,k)=>x.classList.toggle('on',k===active));}
+  function updateBar(){const n=sel.filter(Boolean).length;let tot=0,mrp=0;RSTEPS.forEach((s,i)=>{if(sel[i]){tot+=s.price;mrp+=s.mrp;}});
+    count.textContent=`${n} of 4 in routine`;save.textContent=n?`was ${rup(mrp)} · save ${rup(mrp-tot)}`:'nothing selected';
+    cta.textContent=n?`Add ${n} · ${rup(tot)}`:'Select';cta.style.opacity=n?1:.5;}
+  rail.addEventListener('click',e=>{const b=e.target.closest('.cr-chip');if(!b)return;ci=+b.dataset.i;[...rail.children].forEach((x,k)=>x.classList.toggle('on',k===ci));theme();showStep();});
+  stepsEl.addEventListener('click',e=>{const b=e.target.closest('.rl2-node');if(!b)return;active=+b.dataset.i;showStep();});
+  tog.addEventListener('click',()=>{sel[active]=!sel[active];tog.classList.toggle('sel',sel[active]);tog.textContent=sel[active]?'✓':'+';renderSteps();updateBar();});
+  theme();renderSteps();showStep();updateBar();
+})();
+
+const steps=[
+  {cat:'Cleanse',when:'AM · PM',n:'Glow+ Smoothie Face Wash',price:'₹399',mrp:'₹449',life:'amin/inf-facewash.png',pack:'amin/prod-facewash.png'},
+  {cat:'Treat',when:'PM',n:'Glow Boost Face Serum',price:'₹649',mrp:'₹699',life:'amin/inf-serum.png',pack:'amin/boost-product.png'},
+  {cat:'Moisturise',when:'AM · PM',n:'Illuminate+ Hydra Gel',price:'₹545',mrp:'₹599',life:'amin/inf-moisturiser.png',pack:'amin/prod-moisturizer.png'},
+  {cat:'Protect',when:'AM',n:'Glow+ Dewy Sunscreen SPF 50+',price:'₹559',mrp:'₹699',life:'amin/inf-sunscreen.png',pack:'amin/prod-sunscreen.png'},
+];
+const creators=[
+  {key:'rebel',handle:'@rebel.kid',av:'amin/inf-rebel.png'},
+  {key:'tarini',handle:'@tarinipeshawaria',av:'amin/inf-tarini.png'},
+  {key:'aashi',handle:'@aashiadani',av:'amin/inf-aashi.png'},
+];
+
+/* ---------- 1a ---------- */
+(function(){
+  const strip=document.getElementById('reelStrip');
+  const photo=document.getElementById('reelPhoto'),pack=document.getElementById('reelPack');
+  const nm=document.getElementById('reelName'),pr=document.getElementById('reelPrice'),st=document.getElementById('reelStep');
+  const add=document.getElementById('reelAdd');
+  let cur=3;
+  strip.innerHTML=steps.map((s,i)=>`<div class="reel-thumb${i===cur?' on':''}" data-i="${i}"><img src="${s.life}" alt=""><span class="rn">0${i+1}</span></div>`).join('');
+  function show(i){
+    cur=i;const s=steps[i];
+    photo.style.opacity=0;
+    setTimeout(()=>{photo.src=s.life;photo.style.opacity=1;},160);
+    pack.src=s.pack;nm.textContent=s.n;pr.innerHTML=`${s.price} <s>${s.mrp}</s>`;
+    st.textContent=`Step ${i+1} · ${s.cat}`;
+    add.classList.remove('on');add.textContent='+';
+    [...strip.children].forEach((c,k)=>c.classList.toggle('on',k===i));
+  }
+  strip.addEventListener('click',e=>{const t=e.target.closest('.reel-thumb');if(t)show(+t.dataset.i);});
+  add.addEventListener('click',()=>{add.classList.toggle('on');add.textContent=add.classList.contains('on')?'✓':'+';});
+})();
+
+/* ---------- 1b ---------- */
+(function(){
+  const avs=document.getElementById('edAvs'),sc=document.getElementById('edScroller');
+  const hero=document.getElementById('edHero'),heroK=document.getElementById('edHeroK');
+  avs.innerHTML=creators.map((c,i)=>`<button class="ed-av${i===0?' on':''}" data-i="${i}"><img src="${c.av}" alt="">${c.handle}</button>`).join('');
+  sc.innerHTML=steps.map((s,i)=>`<div class="ed-tile${i===0?' on':''}" data-i="${i}">
+    <div class="ed-pack"><span class="step">${s.cat}</span><img src="${s.pack}" alt=""></div>
+    <div class="ed-info"><div class="ed-name">${s.n}</div>
+    <div class="ed-foot"><span class="ed-price">${s.price} <s>${s.mrp}</s></span><button class="ed-plus" aria-label="Add">+</button></div></div>
+  </div>`).join('');
+  function pick(i){const s=steps[i];hero.style.opacity=0;setTimeout(()=>{hero.src=s.life;hero.style.opacity=1;},150);
+    heroK.textContent=`Step ${i+1} · ${s.cat}`;[...sc.children].forEach((c,k)=>c.classList.toggle('on',k===i));}
+  sc.addEventListener('click',e=>{
+    const plus=e.target.closest('.ed-plus');
+    if(plus){plus.classList.toggle('on');plus.textContent=plus.classList.contains('on')?'✓':'+';e.stopPropagation();return;}
+    const t=e.target.closest('.ed-tile');if(t)pick(+t.dataset.i);
+  });
+  avs.addEventListener('click',e=>{const b=e.target.closest('.ed-av');if(!b)return;[...avs.children].forEach(x=>x.classList.remove('on'));b.classList.add('on');});
+})();
+
+/* ---------- 1c ---------- */
+(function(){
+  const bars=document.getElementById('storyBars');
+  const photo=document.getElementById('storyPhoto'),sticker=document.getElementById('storySticker');
+  const stImg=document.getElementById('stImg'),stName=document.getElementById('stName'),stPrice=document.getElementById('stPrice');
+  const stK=document.getElementById('stK'),stBig=document.getElementById('stBig'),stFull=document.getElementById('stFull'),stAdd=document.getElementById('stAdd');
+  let cur=0;
+  bars.innerHTML=steps.map((_,i)=>`<div class="story-bar" data-i="${i}"><i></i></div>`).join('');
+  function show(i){
+    cur=(i+steps.length)%steps.length;const s=steps[cur];
+    photo.style.opacity=1;photo.src=s.life;
+    stImg.src=s.pack;stName.textContent=s.n;stPrice.textContent=s.price;
+    stK.textContent=`Step ${cur+1} · ${s.cat}`;stBig.textContent=s.n;stFull.innerHTML=`${s.price} <s>${s.mrp}</s>`;
+    stAdd.classList.remove('on');stAdd.textContent='Add to bag';
+    sticker.style.animation='none';void sticker.offsetWidth;sticker.style.animation='';
+    [...bars.children].forEach((b,k)=>{b.classList.toggle('done',k<cur);b.classList.toggle('cur',k===cur);});
+  }
+  document.getElementById('storyNext').addEventListener('click',()=>show(cur+1));
+  document.getElementById('storyPrev').addEventListener('click',()=>show(cur-1));
+  bars.addEventListener('click',e=>{const b=e.target.closest('.story-bar');if(b)show(+b.dataset.i);});
+  stAdd.addEventListener('click',()=>{stAdd.classList.toggle('on');stAdd.textContent=stAdd.classList.contains('on')?'✓ Added':'Add to bag';});
+  show(0);
+})();
+
+/* ---------- 3a — swipeable story reel ---------- */
+(function(){
+  const C3=[
+    {handle:'@rebel.kid',av:'amin/inf-rebel.png',accent:'#e0521b',top:'#fef8ec',bottom:'#fdefd6',suffix:''},
+    {handle:'@tarinipeshawaria',av:'amin/inf-tarini.png',accent:'#d6336c',top:'#fde8ee',bottom:'#fcdde7',suffix:'-tarini'},
+  ];
+  const phone=document.getElementById('phone3');
+  const photo=document.getElementById('rsPhoto'),bars=document.getElementById('rsBars');
+  const av=document.getElementById('rsAv'),handle=document.getElementById('rsHandle');
+  const pack=document.getElementById('rsPack'),nm=document.getElementById('rsName'),pr=document.getElementById('rsPrice'),add=document.getElementById('rsAdd');
+  let ci=0,si=2;const added={};
+  bars.innerHTML=RSTEPS.map(()=>'<div class="rs-bar"><i></i></div>').join('');
+  function theme(){const c=C3[ci];phone.style.setProperty('--accent',c.accent);phone.style.setProperty('--top',c.top);phone.style.setProperty('--bottom',c.bottom);}
+  function render(){
+    const c=C3[ci],s=RSTEPS[si];
+    photo.style.opacity=0;
+    setTimeout(()=>{photo.src=lifeOf(s,c);photo.style.opacity=1;},150);
+    av.src=c.av;handle.textContent=c.handle;
+    pack.src=s.pack;nm.textContent=s.n;pr.innerHTML=rup(s.price)+' <s>'+rup(s.mrp)+'</s>';
+    const key=ci+'-'+si,on=!!added[key];
+    add.classList.toggle('on',on);add.textContent=on?'✓':'+';
+    [...bars.children].forEach((b,k)=>{b.classList.toggle('done',k<si);b.classList.toggle('cur',k===si);});
+  }
+  function go(d){
+    si+=d;
+    if(si>=RSTEPS.length){si=0;ci=(ci+1)%C3.length;theme();}
+    else if(si<0){si=RSTEPS.length-1;ci=(ci-1+C3.length)%C3.length;theme();}
+    render();
+  }
+  document.getElementById('rsNext').addEventListener('click',()=>go(1));
+  document.getElementById('rsPrev').addEventListener('click',()=>go(-1));
+  bars.addEventListener('click',e=>{const b=e.target.closest('.rs-bar');if(!b)return;si=[...bars.children].indexOf(b);render();});
+  add.addEventListener('click',e=>{e.stopPropagation();const key=ci+'-'+si;added[key]=!added[key];render();});
+  theme();render();
+})();
+</script>
+</body>
+</html>

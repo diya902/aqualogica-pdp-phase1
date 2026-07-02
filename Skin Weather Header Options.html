@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="design_doc_mode" content="canvas">
+<title>Skin Weather Header — Options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2b2b2b; --ink-soft:#5c5c5c; --paper:#fdfcf7;
+    --teal:#2A6FDB; --teal-soft:#e2eaff; --uv:#ef3340;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Sora',sans-serif; color:var(--ink);
+    background:#f4f2ec;
+    background-image:radial-gradient(circle at 1px 1px,#d8d5cb 1px,transparent 0);
+    background-size:24px 24px;
+    padding:56px 40px 90px;
+  }
+  .pagehead{max-width:1180px;margin:0 auto 40px;}
+  .pagehead h1{font-size:26px;font-weight:800;margin:0 0 8px;letter-spacing:-.3px;}
+  .pagehead p{margin:0;color:var(--ink-soft);font-size:15px;line-height:1.5;max-width:620px;}
+  .row{
+    max-width:1180px;margin:0 auto;
+    display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start;justify-content:center;
+  }
+  .opt{width:360px;}
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;
+    font-size:13px;font-weight:700;color:var(--ink);
+  }
+  .badge .id{
+    display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;
+    background:var(--ink);color:#fff;font-size:13px;font-weight:800;
+  }
+  .badge .nm{color:var(--ink-soft);font-weight:600;}
+  .note{font-size:12.5px;color:var(--ink-soft);line-height:1.45;margin:12px 2px 0;}
+
+  /* ---- shared card shell ---- */
+  .skinwx{border-radius:20px;background:#fff;box-shadow:0 10px 26px rgba(0,0,0,.10);overflow:hidden;}
+  .uvbody{padding:16px 18px 20px;}
+  .uvadvice{font-weight:400;font-size:15px;color:#2b2b2b;margin:0;line-height:1.5;}
+  .uvadvice b{font-weight:700;}
+  .uvgauge{margin-top:18px;}
+  .uvbar{position:relative;height:8px;border-radius:10px;background:linear-gradient(90deg,#34c759 0%,#9ed100 26%,#ffd000 50%,#ff8a00 74%,#ff2d2d 100%);}
+  .uvmask{position:absolute;top:0;bottom:0;right:0;left:91%;background:#eeeef2;border-radius:0 10px 10px 0;}
+  .uvknob{position:absolute;top:50%;left:91%;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px #ef3340,0 3px 8px rgba(0,0,0,.22);transform:translate(-50%,-50%);}
+  .uvscale{display:flex;justify-content:space-between;margin-top:11px;}
+  .uvscale span{font-weight:700;font-size:10px;letter-spacing:.4px;color:#9a9a9a;}
+  .uvscale span.on{color:#ef3340;}
+
+  .sun{flex:none;}
+
+  .turnhead{max-width:1180px;margin:0 auto 22px;display:flex;align-items:baseline;gap:12px;}
+  .turnhead .t{font-size:13px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--teal);}
+  .turnhead .d{font-size:14px;color:var(--ink-soft);font-weight:600;}
+  .turnrow{margin-bottom:70px;}
+  .uvbody2{padding:14px 18px 20px;}
+
+  /* =================== OPTION D — impact headline =================== */
+  .d-top{background:linear-gradient(120deg,#eef3fb 0%,#fbf4ec 100%);padding:18px;}
+  .d-line1{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;font-size:12.5px;}
+  .d-meta{display:inline-flex;align-items:center;gap:9px;color:var(--ink-soft);font-weight:600;}
+  .d-meta .city{display:inline-flex;align-items:center;gap:5px;color:#16315c;font-weight:700;}
+  .d-meta .city svg{width:14px;height:14px;fill:none;stroke:#16315c;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .d-meta .tdot{width:4px;height:4px;border-radius:50%;background:#c9c2ba;}
+  .d-meta .temp{display:inline-flex;align-items:center;gap:4px;color:#16162a;font-weight:700;}
+  .d-today{font-weight:700;color:var(--teal);}
+  .d-head{font-size:23px;font-weight:800;line-height:1.18;letter-spacing:-.3px;margin:0 0 7px;color:#16162a;}
+  .d-head .hot{color:#d1502c;}
+  .d-sub{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink-soft);}
+  .d-sub b{color:#2b2b2b;font-weight:700;}
+  .d-uvpill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#c24a2c;background:#fbe4dc;border-radius:20px;padding:3px 10px;}
+
+  /* =================== OPTION E — skin effects breakdown =================== */
+  .e-top{background:#fbf6f2;padding:18px;}
+  .e-line1{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;font-size:12.5px;}
+  .e-meta{display:inline-flex;align-items:center;gap:9px;color:var(--ink-soft);font-weight:600;}
+  .e-meta .city{display:inline-flex;align-items:center;gap:5px;color:#16315c;font-weight:700;}
+  .e-meta .city svg{width:14px;height:14px;fill:none;stroke:#16315c;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .e-meta .tdot{width:4px;height:4px;border-radius:50%;background:#c9c2ba;}
+  .e-today{font-weight:700;color:var(--teal);}
+  .e-head{font-size:17px;font-weight:800;line-height:1.25;margin:0 0 14px;color:#16162a;}
+  .e-effects{display:flex;flex-direction:column;gap:9px;}
+  .e-eff{display:flex;align-items:center;gap:11px;background:#fff;border-radius:13px;padding:10px 13px;box-shadow:0 3px 10px rgba(0,0,0,.05);}
+  .e-eff .dot{width:10px;height:10px;border-radius:50%;flex:none;}
+  .e-eff .nm{font-weight:700;font-size:13.5px;color:#2b2b2b;flex:1;}
+  .e-eff .lv{font-weight:700;font-size:11.5px;letter-spacing:.4px;text-transform:uppercase;}
+  .e-eff.hi .dot{background:#e0552e;} .e-eff.hi .lv{color:#c24a2c;}
+  .e-eff.md .dot{background:#f0a835;} .e-eff.md .lv{color:#b57c17;}
+
+  /* =================== OPTION F — impact + action =================== */
+  .f-top{background:linear-gradient(120deg,#eef3fb 0%,#fbf4ec 100%);padding:18px;}
+  .f-line1{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+  .f-meta{display:inline-flex;align-items:center;gap:9px;color:#16162a;font-weight:700;}
+  .f-meta .city{display:inline-flex;align-items:center;gap:6px;color:#16162a;font-weight:700;font-size:15px;}
+  .f-meta .city svg{width:15px;height:15px;fill:none;stroke:#16162a;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .f-meta .tdot{width:4px;height:4px;border-radius:50%;background:#c2c2c2;}
+  .f-meta .temp{display:inline-flex;align-items:center;gap:5px;color:#16162a;font-weight:700;font-size:15px;}
+  .f-sun{width:18px;height:18px;flex:none;}
+  .f-today{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:13px;color:#16162a;background:#fff;border:1px solid rgba(20,40,80,.10);border-radius:22px;padding:6px 15px 6px 12px;}
+  .f-today .live{width:9px;height:9px;border-radius:50%;background:#1f8a5b;flex:none;}
+  .f-divider{border:0;border-top:1.5px dotted rgba(0,0,0,.22);margin:0 0 12px;}
+  .f-uv{font-weight:700;font-size:12.5px;color:#d92d20;line-height:1.15;margin-bottom:4px;}
+  .f-head{font-size:19px;font-weight:800;line-height:1.18;margin:0 0 14px;color:#16162a;}
+  .f-action{display:flex;align-items:center;gap:12px;background:#fff;border-radius:15px;padding:12px 14px;}
+  .f-prod{width:76px;height:76px;flex:none;object-fit:contain;margin:-4px 0;}
+  .f-atxt .k{font-weight:600;font-size:10.5px;letter-spacing:.6px;text-transform:uppercase;color:#16162a;margin-bottom:8px;}
+  .f-checks{display:flex;flex-direction:column;gap:6px;}
+  .f-chk{display:flex;align-items:center;gap:7px;font-size:13px;color:#16162a;font-weight:800;white-space:nowrap;}
+  .f-chk .tk{width:13px;height:13px;flex:none;display:grid;place-items:center;}
+  .f-chk .tk svg{width:13px;height:13px;stroke:#16162a;stroke-width:3;fill:none;}
+  .f-chk em{font-style:normal;color:#16162a;font-weight:400;}
+
+  /* =================== OPTION A — airy stat row =================== */
+  .a-top{background:linear-gradient(120deg,#eef3fb 0%,#fbf4ec 100%);padding:16px 18px 18px;}
+  .a-line1{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+  .a-loc{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:14px;color:#16315c;}
+  .a-loc svg{width:15px;height:15px;fill:none;stroke:#16315c;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .a-today{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:12px;color:var(--teal);background:#fff;border-radius:20px;padding:6px 13px 6px 11px;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+  .a-today i{width:7px;height:7px;border-radius:50%;background:var(--teal);}
+  .a-stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .a-stat .lbl{font-size:10.5px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:#93a0b5;margin-bottom:5px;}
+  .a-stat .val{display:flex;align-items:center;gap:8px;font-weight:800;font-size:26px;line-height:1;color:#16162a;}
+  .a-uvtag{font-size:10px;font-weight:700;letter-spacing:.3px;color:#c24a2c;background:#fbe4dc;border-radius:20px;padding:3px 9px;align-self:center;}
+
+  /* =================== OPTION B — UV hero =================== */
+  .b-top{background:#fbf6f2;padding:18px;}
+  .b-line1{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .b-meta{display:inline-flex;align-items:center;gap:10px;font-weight:600;font-size:13px;color:var(--ink-soft);}
+  .b-meta .city{display:inline-flex;align-items:center;gap:5px;font-weight:700;color:#16315c;}
+  .b-meta .city svg{width:14px;height:14px;fill:none;stroke:#16315c;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .b-meta .tdot{width:4px;height:4px;border-radius:50%;background:#c9c2ba;}
+  .b-meta .temp{display:inline-flex;align-items:center;gap:5px;color:#16162a;font-weight:700;}
+  .b-today{font-weight:700;font-size:12px;color:var(--teal);}
+  .b-hero{display:flex;align-items:baseline;gap:12px;}
+  .b-num{font-weight:800;font-size:46px;line-height:.9;color:#16162a;letter-spacing:-1px;}
+  .b-r{display:flex;flex-direction:column;gap:5px;}
+  .b-r .lbl{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#93a0b5;}
+  .b-chip{align-self:flex-start;font-size:11px;font-weight:700;color:#c24a2c;background:#fbe4dc;border-radius:20px;padding:3px 11px;}
+
+  /* =================== OPTION C — soft tiles =================== */
+  .c-top{background:#fff;padding:16px 16px 4px;}
+  .c-line1{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .c-loc{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:14px;color:#16315c;}
+  .c-loc svg{width:15px;height:15px;fill:none;stroke:#16315c;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .c-today{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:12px;color:var(--teal);background:var(--teal-soft);border-radius:20px;padding:6px 13px 6px 11px;}
+  .c-today i{width:7px;height:7px;border-radius:50%;background:var(--teal);}
+  .c-tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .c-tile{background:#f6f5f0;border-radius:16px;padding:13px 15px;display:flex;align-items:center;gap:11px;box-shadow:0 3px 10px rgba(0,0,0,.05);}
+  .c-tile .lbl{font-size:10.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#9aa0a8;margin-bottom:3px;}
+  .c-tile .val{font-weight:800;font-size:23px;line-height:1;color:#16162a;}
+  .c-uvdot{width:9px;height:9px;border-radius:50%;background:#ef7a4a;box-shadow:0 0 0 4px #fbe4dc;flex:none;}
+  .c-tile.uv{background:#fdf1ec;}
+</style>
+</head>
+<body>
+  <div class="pagehead">
+    <h1>Skin Weather — lead with the impact on skin</h1>
+    <p>The hero isn't the 8.4 — it's <b>what today's UV does to your skin and what to do about it</b>. Turn 2 (below) reframes the card around impact + action; the number stays as quiet context. Turn 1 keeps the earlier number-first layouts for reference. Tell me a letter (or mix ideas) and I'll roll it into all three PDPs.</p>
+  </div>
+
+  <div class="turnhead"><span class="t">Turn 2</span><span class="d">Impact-led — what the UV means for skin</span></div>
+  <div class="row turnrow">
+
+    <!-- ============ OPTION D ============ -->
+    <div class="opt" id="2a">
+      <div class="badge"><span class="id">D</span> Impact headline <span class="nm">· plain-language warning</span></div>
+      <div class="skinwx">
+        <div class="d-top">
+          <div class="d-line1">
+            <span class="d-meta">
+              <span class="city"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.4 7-11a7 7 0 1 0-14 0c0 4.6 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>Delhi</span>
+              <span class="tdot"></span>
+              <span class="temp"><svg class="sun" width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.6" fill="#FFB300"></circle><g stroke="#FFB300" stroke-width="2" stroke-linecap="round"><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2 2M17.1 17.1l2 2M19.1 4.9l-2 2M6.9 17.1l-2 2"></path></g></svg>32°C</span>
+            </span>
+            <span class="d-today">Today</span>
+          </div>
+          <h3 class="d-head">Sun is <span class="hot">harsh on skin</span> today</h3>
+          <p class="d-sub"><b>Very high UV (8.4)</b> — unprotected skin can burn in ~15 min, with high tan &amp; dryness risk.</p>
+        </div>
+        <div class="uvbody2">
+          <div class="uvgauge" style="margin-top:0"><div class="uvbar"><span class="uvmask"></span><span class="uvknob"></span></div>
+            <div class="uvscale"><span>LOW</span><span>MODERATE</span><span>HIGH</span><span class="on">VERY HIGH</span></div></div>
+        </div>
+      </div>
+      <p class="note">The warning is the headline, in plain words. The number lives inside the sentence as evidence, not as the star. Skimmable in one read.</p>
+    </div>
+
+    <!-- ============ OPTION E ============ -->
+    <div class="opt" id="2b">
+      <div class="badge"><span class="id">E</span> Skin-effects breakdown <span class="nm">· concrete risks</span></div>
+      <div class="skinwx">
+        <div class="e-top">
+          <div class="e-line1">
+            <span class="e-meta">
+              <span class="city"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.4 7-11a7 7 0 1 0-14 0c0 4.6 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>Delhi</span>
+              <span class="tdot"></span>
+              <span>32°C · UV 8.4</span>
+            </span>
+            <span class="e-today">Today</span>
+          </div>
+          <h3 class="e-head">What today's sun does to your skin</h3>
+          <div class="e-effects">
+            <div class="e-eff hi"><span class="dot"></span><span class="nm">Sunburn risk</span><span class="lv">High</span></div>
+            <div class="e-eff hi"><span class="dot"></span><span class="nm">Tan &amp; pigmentation</span><span class="lv">High</span></div>
+            <div class="e-eff md"><span class="dot"></span><span class="nm">Dryness &amp; dullness</span><span class="lv">Moderate</span></div>
+          </div>
+        </div>
+        <div class="uvbody2">
+          <div class="uvgauge" style="margin-top:0"><div class="uvbar"><span class="uvmask"></span><span class="uvknob"></span></div>
+            <div class="uvscale"><span>LOW</span><span>MODERATE</span><span>HIGH</span><span class="on">VERY HIGH</span></div></div>
+        </div>
+      </div>
+      <p class="note">Translates one abstract number into the three things people actually worry about — burn, tan, dryness — each with its own level. Most educational of the three.</p>
+    </div>
+
+    <!-- ============ OPTION F ============ -->
+    <div class="opt" id="2c">
+      <div class="badge"><span class="id">F</span> Impact + action <span class="nm">· tells them what to do</span></div>
+      <div class="skinwx">
+        <div class="f-top">
+          <div class="f-line1">
+            <span class="f-meta">
+              <span class="city"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.4 7-11a7 7 0 1 0-14 0c0 4.6 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>Delhi</span>
+              <span class="tdot"></span>
+              <span class="temp"><svg class="f-sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.6" fill="#FFB300"></circle><g stroke="#FFB300" stroke-width="2" stroke-linecap="round"><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2 2M17.1 17.1l2 2M19.1 4.9l-2 2M6.9 17.1l-2 2"></path></g></svg>32°C</span>
+            </span>
+            <span class="f-today"><span class="live"></span>Today</span>
+          </div>
+          <hr class="f-divider">
+          <div class="f-uv">Very high UV (8.4)</div>
+          <h3 class="f-head">High tan &amp; dryness risk</h3>
+          <div class="f-action">
+            <img class="f-prod" src="amin/spf-thumb.png" alt="Aqualogica Glow+ Dewy Gel Sunscreen SPF 50+">
+            <span class="f-atxt">
+              <div class="k">Protects against</div>
+              <div class="f-checks">
+                <span class="f-chk"><span class="tk"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"></path></svg></span>UVA <em>(tan &amp; dark spots)</em></span>
+                <span class="f-chk"><span class="tk"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"></path></svg></span>UVB <em>(sunburn)</em></span>
+              </div>
+            </span>
+          </div>
+        </div>
+      </div>
+      <p class="note">States the impact, then a clear action tied to the product. Mostly monochrome; hierarchy comes from font weight, not color.</p>
+    </div>
+
+  </div>
+
+  <div class="turnhead"><span class="t">Turn 1</span><span class="d">Number-first layouts (earlier)</span></div>
+  <div class="row turnrow">
+
+    <!-- ============ OPTION A ============ -->
+    <div class="opt" id="1a">
+      <div class="badge"><span class="id">A</span> Airy stat row <span class="nm">· labelled columns</span></div>
+      <div class="skinwx">
+        <div class="a-top">
+          <div class="a-line1">
+            <span class="a-loc"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.4 7-11a7 7 0 1 0-14 0c0 4.6 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>Delhi</span>
+            <span class="a-today"><i></i>Today</span>
+          </div>
+          <div class="a-stats">
+            <div class="a-stat">
+              <div class="lbl">Temperature</div>
+              <div class="val">
+                <svg class="sun" width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.6" fill="#FFB300"></circle><g stroke="#FFB300" stroke-width="2" stroke-linecap="round"><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2 2M17.1 17.1l2 2M19.1 4.9l-2 2M6.9 17.1l-2 2"></path></g></svg>
+                32°
+              </div>
+            </div>
+            <div class="a-stat">
+              <div class="lbl">UV Index</div>
+              <div class="val">8.4 <span class="a-uvtag">Very High</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="uvbody">
+          <p class="uvadvice"><b>Tan</b> &amp; burn risk + <b>dryness</b> are high today.</p>
+          <div class="uvgauge"><div class="uvbar"><span class="uvmask"></span><span class="uvknob"></span></div>
+            <div class="uvscale"><span>LOW</span><span>MODERATE</span><span>HIGH</span><span class="on">VERY HIGH</span></div></div>
+        </div>
+      </div>
+      <p class="note">Cleanest fix: two labelled columns replace the pipes, so temp and UV read as distinct facts. Severity moves into a soft tag instead of a loud red number.</p>
+    </div>
+
+    <!-- ============ OPTION B ============ -->
+    <div class="opt" id="1b">
+      <div class="badge"><span class="id">B</span> UV hero <span class="nm">· the one number that matters</span></div>
+      <div class="skinwx">
+        <div class="b-top">
+          <div class="b-line1">
+            <span class="b-meta">
+              <span class="city"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.4 7-11a7 7 0 1 0-14 0c0 4.6 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>Delhi</span>
+              <span class="tdot"></span>
+              <span class="temp"><svg class="sun" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.6" fill="#FFB300"></circle><g stroke="#FFB300" stroke-width="2" stroke-linecap="round"><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2 2M17.1 17.1l2 2M19.1 4.9l-2 2M6.9 17.1l-2 2"></path></g></svg>32°C</span>
+            </span>
+            <span class="b-today">Today</span>
+          </div>
+          <div class="b-hero">
+            <span class="b-num">8.4</span>
+            <span class="b-r">
+              <span class="lbl">UV Index</span>
+              <span class="b-chip">Very High</span>
+            </span>
+          </div>
+        </div>
+        <div class="uvbody">
+          <p class="uvadvice"><b>Tan</b> &amp; burn risk + <b>dryness</b> are high today.</p>
+          <div class="uvgauge"><div class="uvbar"><span class="uvmask"></span><span class="uvknob"></span></div>
+            <div class="uvscale"><span>LOW</span><span>MODERATE</span><span>HIGH</span><span class="on">VERY HIGH</span></div></div>
+        </div>
+      </div>
+      <p class="note">Since this card is about sun exposure, UV becomes the headline number. City &amp; temp drop to a quiet metadata line — minimal, and the hierarchy is obvious at a glance.</p>
+    </div>
+
+    <!-- ============ OPTION C ============ -->
+    <div class="opt" id="1c">
+      <div class="badge"><span class="id">C</span> Soft tiles <span class="nm">· two calm metric chips</span></div>
+      <div class="skinwx">
+        <div class="c-top">
+          <div class="c-line1">
+            <span class="c-loc"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.4 7-11a7 7 0 1 0-14 0c0 4.6 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>Delhi</span>
+            <span class="c-today"><i></i>Today</span>
+          </div>
+          <div class="c-tiles">
+            <div class="c-tile">
+              <svg class="sun" width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.6" fill="#FFB300"></circle><g stroke="#FFB300" stroke-width="2" stroke-linecap="round"><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2 2M17.1 17.1l2 2M19.1 4.9l-2 2M6.9 17.1l-2 2"></path></g></svg>
+              <span><span class="lbl">Temp</span><br><span class="val">32°C</span></span>
+            </div>
+            <div class="c-tile uv">
+              <span class="c-uvdot"></span>
+              <span><span class="lbl">UV Index</span><br><span class="val">8.4</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="uvbody">
+          <p class="uvadvice"><b>Tan</b> &amp; burn risk + <b>dryness</b> are high today.</p>
+          <div class="uvgauge"><div class="uvbar"><span class="uvmask"></span><span class="uvknob"></span></div>
+            <div class="uvscale"><span>LOW</span><span>MODERATE</span><span>HIGH</span><span class="on">VERY HIGH</span></div></div>
+        </div>
+      </div>
+      <p class="note">Each metric gets its own soft tile — tactile and scannable, no dividers at all. The UV tile carries a small severity dot instead of red text.</p>
+    </div>
+
+  </div>
+
+</body>
+</html>
